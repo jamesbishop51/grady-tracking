@@ -19,7 +19,7 @@ async function CheckPermissions() {
     return true;
   }
   if (status.denied) {
-    const c = confirm('We need your permission to use your camera to be able to scan barcodes');
+    const c = confirm('We need your permission to use your camera to be able to scan BarCodes');
 
     if(c) {
       BarcodeScanner.openAppSettings();

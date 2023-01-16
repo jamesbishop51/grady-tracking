@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { App } from '@capacitor/app'
+import GdButtonLink from './components/gd-button-link.vue';
 
 
 console.log('init test')
@@ -19,7 +20,7 @@ App.addListener('backButton', ({ canGoBack}) => {
         <RouterView />
       </main>
       <footer>
-        <RouterLink to="/">Home</RouterLink>
+        <GdButtonLink to="/">Home</GdButtonLink>
       </footer>
     
   </div>
