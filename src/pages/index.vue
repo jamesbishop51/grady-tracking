@@ -1,16 +1,26 @@
 <script lang="ts" setup>
-import GdButtonLink from '../components/gd-button-link.vue';
+import GdSelect from '../components/gd-select.vue';
 import GdContainer from '../components/gd-container.vue';
+import { useOperatorStore } from '../features/operators/operator-store';
+import GdLabel from '../components/gd-label.vue';
+import { options } from '../features/operators/operator-options';
+
+defineProps<{id: string}>()
+const store = useOperatorStore()
+
 
 </script>
 
 <template>
   <GdContainer>
-    <div class="fex flex-col gap-4 pt-8">
+    <div class="fex flex-col gap-4 pt-8" v-for="operators in store.operatorItems" :key="operators.id">
+      <GdLabel>Operator</GdLabel>
+      <GdSelect v-model="operators.id" :options="operators.tasks" select-prompt="Select Operator"></GdSelect>
+      <GdLabel>Tasks</GdLabel>
+    <select>
+        <option v-for="operators in store.operatorItems">{{ operators.name }}</option>
+      </select>
       
-      <GdButtonLink to="/scan-barcode">Scan BarCode</GdButtonLink>
-
-      <h2>yoyoyoyoyoyo</h2>
     </div>
   </GdContainer>
 
