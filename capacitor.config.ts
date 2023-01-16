@@ -6,8 +6,8 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   bundledWebRuntime: false,
   server: {
-    url: "http://100.92.238.79:5173",
-    // url: "http://192.168.1.111:5173",
+    url: "http://100.92.238.70:5173", //phone
+    // url: "http://192.168.1.111:5173", //emulator
     cleartext: true
   },
 };
