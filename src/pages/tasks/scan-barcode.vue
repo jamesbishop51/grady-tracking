@@ -24,6 +24,7 @@ async function CheckPermissions() {
   if (status.granted) {
     return true;
   }
+  
   if (status.denied) {
     const c = confirm('We need your permission to use your camera to be able to scan BarCodes');
 
@@ -48,8 +49,6 @@ async function startScan() {
     }
   }
 }
-
-
 
 async function stopScan() {
   BarcodeScanner.showBackground();

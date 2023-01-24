@@ -37,7 +37,7 @@ async function updateUser(e: Event) {
     </div>
     <!-- test code will be removed -->
     <div v-if="store.selectedUser">
-    {{ store.nameAndTask }}</div>
+      {{ store.nameAndTask }}</div>
   </GdContainer>
 
 </template>

@@ -17,7 +17,6 @@ const store = useOperatorStore()
         <GdButtonLink  to="/">Scan History</GdButtonLink>
         <GdButtonLink  to="/">Change User</GdButtonLink>
       </div>
-
     </GdContainer>
   </GdCard>
 </template>

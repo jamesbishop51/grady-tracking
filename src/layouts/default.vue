@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { RouterLink, RouterView } from 'vue-router'
-import GdButtonLink from '../components/gd-button-link.vue';
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
