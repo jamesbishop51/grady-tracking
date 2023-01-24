@@ -74,6 +74,10 @@ export const useOperatorStore = defineStore('operator-store', () => {
     return data.name
   }
 
+  function clearUser() {
+    
+  }
+
   return {
     operatorItems,
     selectedUser,

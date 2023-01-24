@@ -27,13 +27,16 @@ async function updateUser(e: Event) {
         </option>
       </select>
 
-      <GdLabel>Tasks</GdLabel>
+      <GdLabel class="pt-4">Tasks</GdLabel>
       <select class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-secondary 
         focus:outline-none focus:ring-secondary sm:text-sm" v-model="store.currentUserTask">
         <option value="">Select Task</option>
         <option v-for="options in store.currentUserTasks">{{ options.text }}</option>
       </select>
-      <GdButtonLink to="/tasks">test</GdButtonLink>
+      <div class="pt-4">
+        <GdButtonLink :to="`/tasks/${store.currentUserId}`">Submit</GdButtonLink>
+      </div>
+
     </div>
     <!-- test code will be removed -->
     <div v-if="store.selectedUser">

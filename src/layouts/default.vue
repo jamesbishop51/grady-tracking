@@ -1,10 +1,20 @@
 <script lang="ts" setup>
 import { RouterView } from 'vue-router'
+import GdContainer from '../components/gd-container.vue'
+import { Icon } from '@iconify/vue'
+
+
 </script>
 
 <template>
+
   <div class="flex flex-col h-screen">
-    <h1 class="text-4xl font-bold tracking-tight text-secondary p-2 border-b-2">Grady Tracking App</h1>
+    <div class="flex items-start mt-1 md:col-span-5 md:mt-0 border-b-2">
+      <RouterLink to="/">
+        <Icon class="flex-1 text-secondary" height="3em" icon="material-symbols:home-outline" />
+      </RouterLink>
+      <h1 class="text-4xl font-bold tracking-tight text-secondary p-2 flex-3">Grady Tracking App</h1>
+    </div>
     <main class="p-2 flex-1 overflow-y-scroll">
       <div>
         <RouterView />

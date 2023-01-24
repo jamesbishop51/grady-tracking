@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner'
-import GdTextInput from '../../components/gd-text-input.vue';
-import GdLabel from '../../components/gd-label.vue';
-import GdButtonLink from '../../components/gd-button-link.vue';
-import { useOperatorStore } from '../../features/operators/operator-store';
+import GdTextInput from '../../../components/gd-text-input.vue';
+import GdLabel from '../../../components/gd-label.vue';
+import GdButtonLink from '../../../components/gd-button-link.vue';
+import { useOperatorStore } from '../../../features/operators/operator-store';
 
 const store = useOperatorStore()
 
