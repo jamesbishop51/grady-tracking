@@ -1,53 +1,69 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { ref, computed } from 'vue'
 import { options } from './operator-options';
-
+import { get, set } from "idb-keyval"
 export interface Operators {
   name: string,
   id: string,
   tasks: TaskItems[]
 }
 export interface TaskItems {
-  text: string,
-  id: string
+  taskKey: string,
+  text: string
 }
-export interface CurrentUser {
-  name?: string ,
-  task?: string 
+
+export interface SelectOption {
+  text: string
+  value: string | number
+}
+
+export interface selectedUser {
+  name: string,
+  id: string,
+  task: string
 }
 
 export const useOperatorStore = defineStore('operator-store', () => {
+  /** State */
   const operatorItems = ref<Operators[]>(options)
-  const currentUser = ref<CurrentUser>({
-    name: undefined,
-    task: undefined
+  const currentUserId = ref<string>("")
+  const selectedUserTask = ref<string>()
+  /** watcher */
+
+  //
+
+  /** Getters */
+  const currentUserTasks = computed<TaskItems[]>(() => {
+    if (!currentUserId) return []
+
+    const data = operatorItems.value.find(d => d.id === currentUserId.value)
+    if (!data) return []
+
+    return data.tasks
   })
+  const operatorsToOptions = computed<SelectOption[]>(() =>
+  operatorItems.value.map(s => ({ text: s.name, value: s.id })),
+  )
 
-  function getOperator(key: string) {
-    return operatorItems.value.find(i => i.id === key)
+  /** Actions */
+  function selectUser(id: string) {
+    console.log(id)
+    currentUserId.value = id
   }
-  function getOperatorName(key: string) {
-    const item = getOperator(key)
-    if (!item) return []
-    return item.name
-  }
-  function getTasks(key: string): string[] {
-    const item = getOperator(key)
-    if (!item) return []
+  
 
-    return item.tasks.map(t => t.text)
-  }
 
   return {
     operatorItems,
-    currentUser,
-    getOperator,
-    getTasks,
-    getOperatorName
+    selectedUserTask,
+    currentUserId,
+    currentUserTasks,
+    operatorsToOptions,
+    selectUser,
+    
+
   }
-
 });
-
 
 if (import.meta.hot)
   import.meta.hot.accept(acceptHMRUpdate(useOperatorStore, import.meta.hot))

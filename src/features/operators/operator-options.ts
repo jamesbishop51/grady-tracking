@@ -5,42 +5,51 @@ export const options: Operators[] = [
     name: "james",
     id: "1",
     tasks: [{
+      taskKey: "cnc-1",
       text: "cnc - 1",
-      id: '1'
+      
     },{
+      taskKey: "cnc-2",
       text: "cnc - 2",
-      id: '2'
+      
     },{
-      text: "cbc - 3",
-      id: '3'
+      taskKey: "cbc-3",
+      text: "cnc - 3",
+      
     }]
   },
   {
     name: "Naga",
     id: "2",
     tasks: [{
-      text: "sanding doors",
-      id: '1'
+      taskKey: "sanding-doors",
+      text: "Sanding Doors"
+      
     },{
-      text: "sanding frames",
-      id: '2'
+      taskKey: "sanding-frames",
+      text: "Sanding Frames"
+      
     },{
-      text: "sanding side lights",
-      id: '3'
+      taskKey: "sanding-side-lights",
+      text: "Sanding Side Lights"
+      
     }]
   },
   {
     name: "Shane",
     id: "3",
     tasks: [{
-      text: "painting frame",
-      id: '1'
+      taskKey: "painting-frame",
+      text: "Painting Frames"
+      
     },{
-      text: "painting Sash",
-      id: '2'
+      taskKey: "painting-sash",
+      text: "Painting Sash"
+      
     },{
-      text: "painting SideLights",
-      id: '3'
+      taskKey: "painting-sidelights",
+      text: "Painting SideLights"
+      
     }]
   }
 ]
