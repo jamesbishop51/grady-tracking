@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import GdButtonLink from '../../../components/gd-button-link.vue';
-import GdCard from '../../../components/gd-card.vue';
-import GdContainer from '../../../components/gd-container.vue';
-import { useOperatorStore } from '../../../features/operators/operator-store';
+import GdButtonLink from '~/components/gd-button-link.vue';
+import GdCard from '~/components/gd-card.vue';
+import GdContainer from '~/components/gd-container.vue';
+import { useOperatorStore } from '~/features/operators/operator-store';
 
 const { id } = defineProps<{ id: string }>()
 

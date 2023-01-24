@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import GdSelect from '../components/gd-select.vue';
-import GdContainer from '../components/gd-container.vue';
-import { useOperatorStore } from '../features/operators/operator-store';
-import GdLabel from '../components/gd-label.vue';
-import GdButtonLink from '../components/gd-button-link.vue';
-import gdButtonVue from '../components/gd-button.vue';
+import GdSelect from '~/components/gd-select.vue';
+import GdContainer from '~/components/gd-container.vue';
+import { useOperatorStore } from '~/features/operators/operator-store';
+import GdLabel from '~/components/gd-label.vue';
+import GdButtonLink from '~/components/gd-button-link.vue';
+import gdButtonVue from '~/components/gd-button.vue';
 
 const store = useOperatorStore()
 const id = store.operatorItems
