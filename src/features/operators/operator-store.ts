@@ -17,17 +17,19 @@ export interface SelectOption {
   value: string | number
 }
 
-export interface selectedUser {
-  name: string,
-  id: string,
-  task: string
+export interface SelectedUser {
+  name?: string,
+  id?: string,
+  task?: string
 }
 
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
   const operatorItems = ref<Operators[]>(options)
   const currentUserId = ref<string>("")
-  const selectedUserTask = ref<string>()
+  const currentUserTask = ref<string>("")
+
+
   /** watcher */
 
   //
@@ -41,26 +43,40 @@ export const useOperatorStore = defineStore('operator-store', () => {
 
     return data.tasks
   })
+
+  const currentUserName = computed(() => selectUsername())
+
+  const selectedUser = computed<SelectedUser>(() => ({
+    name: currentUserName.value,
+    id: currentUserId.value,
+    task: currentUserTask.value
+  }))
+
   const operatorsToOptions = computed<SelectOption[]>(() =>
-  operatorItems.value.map(s => ({ text: s.name, value: s.id })),
+    operatorItems.value.map(o => ({ text: o.name, value: o.id })),
   )
 
   /** Actions */
-  function selectUser(id: string) {
-    console.log(id)
+  function selectUserById(id: string) {
     currentUserId.value = id
   }
-  
 
+  function selectUsername() {
+    const data = operatorItems.value.find(d => d.id === currentUserId.value)
+    if (!data) return ""
+    return data.name
+  }
 
   return {
     operatorItems,
-    selectedUserTask,
+    selectedUser,
+    currentUserName,
+    currentUserTask,
     currentUserId,
     currentUserTasks,
     operatorsToOptions,
-    selectUser,
-    
+    selectUserById,
+
 
   }
 });
