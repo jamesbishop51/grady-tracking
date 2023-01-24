@@ -1,9 +1,12 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner'
-import GdTextInput from '../components/gd-text-input.vue';
-import GdLabel from '../components/gd-label.vue';
-import GdButtonLink from '../components/gd-button-link.vue';
+import GdTextInput from '../../components/gd-text-input.vue';
+import GdLabel from '../../components/gd-label.vue';
+import GdButtonLink from '../../components/gd-button-link.vue';
+import { useOperatorStore } from '../../features/operators/operator-store';
+
+const store = useOperatorStore()
 
 onMounted(() => {
   startScan()
@@ -56,10 +59,11 @@ async function stopScan() {
 </script>
 <template>
   <div class="p-4 grid sm:grid-cols-3">
-    <h5 class="text-4xl font-bold tracking-tight">User - Task PH</h5>
+    <h5 class="text-2xl font-bold tracking-tight">{{ store.nameAndTask }}</h5>
     <GdLabel>Manual Entry</GdLabel>
-    <GdTextInput></GdTextInput>
+    <GdTextInput v-model="barCode"></GdTextInput>
     <GdButtonLink class="mt-4" to="/">Submit</GdButtonLink>
+    <div>{{ barCode }}</div>
   </div>
 
 </template>

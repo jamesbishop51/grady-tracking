@@ -33,10 +33,11 @@ async function updateUser(e: Event) {
         <option value="">Select Task</option>
         <option v-for="options in store.currentUserTasks">{{ options.text }}</option>
       </select>
-      <GdButtonLink to="/home">test</GdButtonLink>
+      <GdButtonLink to="/tasks">test</GdButtonLink>
     </div>
+    <!-- test code will be removed -->
     <div v-if="store.selectedUser">
-    {{ store.selectedUser.name }} - {{ store.selectedUser.task }}</div>
+    {{ store.nameAndTask }}</div>
   </GdContainer>
 
 </template>

@@ -56,6 +56,13 @@ export const useOperatorStore = defineStore('operator-store', () => {
     operatorItems.value.map(o => ({ text: o.name, value: o.id })),
   )
 
+  const nameAndTask = computed(() => {
+    if(!currentUserTask)
+      return selectedUser.value.name
+
+      return `${selectedUser.value.name} - ${selectedUser.value.task}`
+  })
+
   /** Actions */
   function selectUserById(id: string) {
     currentUserId.value = id
@@ -75,6 +82,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
     currentUserId,
     currentUserTasks,
     operatorsToOptions,
+    nameAndTask,
     selectUserById,
 
 
