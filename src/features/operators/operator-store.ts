@@ -23,29 +23,12 @@ export interface SelectedUser {
   task?: string
 }
 
-export interface TaskEntry {
-  taskKey?: string,
-  text?: string,
-  operatorName: string,
-  BarcodeId?: string,
-  comment?: string
-}
-export interface TaskCompletion {
-  entries: TaskEntry[],
-  dateCompleted?: string
-}
-
-const initialEntries: TaskEntry[] = options.map(o => ({
-  operatorName: o.name
-}))
-
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
   const operatorItems = ref<Operators[]>(options)
-  const taskEntries = ref<TaskEntry[]>([])
   const currentUserId = ref<string>("")
   const currentUserTask = ref<string>("")
-
+  const scanTime = ref<Date>()
 
   /** watcher */
 
@@ -60,6 +43,8 @@ export const useOperatorStore = defineStore('operator-store', () => {
 
     return data.tasks
   })
+
+  
 
   const currentUserName = computed(() => selectUsername())
 
@@ -91,26 +76,6 @@ export const useOperatorStore = defineStore('operator-store', () => {
     return data.name
   }
 
-  function reloadEntries() {
-    taskEntries.value = JSON.parse(JSON.stringify(initialEntries))
-  }
-
-  async function completeTask() {
-    if (!currentUserId.value) throw Error("Placeholder")
-
-    const previousTasksJson = await get<string>(currentUserId.value)
-    const previousTasks = JSON.parse(previousTasksJson || '[]')
-
-    previousTasks.unshift({
-      entries: taskEntries.value,
-      dateCompleted: new Date()
-    })
-
-    await set(currentUserId.value, JSON.stringify(previousTasks))
-
-    reloadEntries()
-  }
-
   return {
     operatorItems,
     selectedUser,
@@ -119,9 +84,9 @@ export const useOperatorStore = defineStore('operator-store', () => {
     currentUserId,
     currentUserTasks,
     operatorsToOptions,
+    scanTime,
     nameAndTask,
     selectUserById,
-    completeTask
 
 
   }
