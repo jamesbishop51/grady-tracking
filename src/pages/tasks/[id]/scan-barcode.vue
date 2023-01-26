@@ -65,24 +65,23 @@ async function stopScan() {
 </script>
 <template>
   <GdContainer>
-    <GdCard >
+    <GdCard>
       <div v-if="active">
-      <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.nameAndTask }}</h5>
-      <div class="p-4 grid gap-4 sm:grid-cols-3">
-        <GdButton @click="startScan()">Scan Barcode</GdButton>
-        <div>
-          <GdLabel>Manual Entry</GdLabel>
-          <GdTextInput v-model="barCode"></GdTextInput>
+        <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.nameAndTask }}</h5>
+        <div class="p-4 grid gap-4 sm:grid-cols-3">
+          <GdButton @click="startScan()">Scan Barcode</GdButton>
+          <div>
+            <GdLabel>Manual Entry</GdLabel>
+            <GdTextInput v-model="barCode" value="DB-"></GdTextInput>
+          </div>
+          <GdButtonLink class="mt-4" :to="`/tasks/${id}/submit/${barCode}`">Submit</GdButtonLink>
         </div>
-        <GdButtonLink class="mt-4" :to="`/tasks/${id}/submit/${barCode}`">Submit</GdButtonLink>
-        {{ barCode }}
       </div>
-    </div>
       <div v-else class="grid">
-      <GdButton @click="stopScan()">Cancel Scan</GdButton>
-    </div>
+        <GdButton class="ms-2" @click="stopScan()">Cancel Scan</GdButton>
+      </div>
     </GdCard>
-    
+
   </GdContainer>
 
 

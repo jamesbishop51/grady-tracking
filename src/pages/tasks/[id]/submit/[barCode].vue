@@ -22,7 +22,7 @@ function dateString(dateCompleted: string | Date | undefined) {
 <template>
   <GdContainer>
     <GdCard>
-      <div class="px-4">
+      <div class="px-4 pt-4">
         <h1 class="text-3xl font-bold tracking-tight">{{ store.nameAndTask }}</h1>
         <h2 class="text-2xl font-bold tracking-tight pt-2">{{ barCode }}</h2>
       </div>
@@ -35,7 +35,7 @@ function dateString(dateCompleted: string | Date | undefined) {
           <GdLabel>Extras (optional)</GdLabel>
           <GdTextInput></GdTextInput>
         </div>
-        <!-- <GdButtonLink to="/">Add image/video</GdButtonLink> -->
+        <GdButtonLink disabled to="">Add image/video</GdButtonLink>
         <GdButtonLink :to="`/tasks/${id}`">Submit</GdButtonLink>
       </div>
     </GdCard>
