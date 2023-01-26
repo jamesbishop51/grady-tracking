@@ -25,10 +25,10 @@ const data = new Date()
 
       <div>
         <GdLabel>Extras (optional)</GdLabel>
-        <GdTextInput v-model=""></GdTextInput>
+        <GdTextInput></GdTextInput>
       </div>
 
-      <GdButtonLink to="/">Add image/video</GdButtonLink>
+      <!-- <GdButtonLink to="/">Add image/video</GdButtonLink> -->
       <GdButtonLink :to="`/tasks/${id}`">Submit</GdButtonLink>
     </div>
   </GdCard>

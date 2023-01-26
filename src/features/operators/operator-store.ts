@@ -1,7 +1,11 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { options } from './operator-options';
-import { get, set } from "idb-keyval"
+import axios from 'axios'
+
+// const pingUrl = "https://jsonplaceholder.typicode.com/todos/1"
+const pingUrl = "https://localhost:58441/api/task"
+// const pingUrl = "http://http://192.168.41.72:58441/:58441/api/ping"
 export interface Operators {
   name: string,
   id: string,
@@ -25,11 +29,12 @@ export interface SelectedUser {
 
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
-  const operatorItems = ref<Operators[]>(options)
+  const operatorItems = ref<Operators[]>([])
   const currentUserId = ref<string>("")
   const currentUserTask = ref<string>("")
   const scanTime = ref<Date>()
-
+  const message = ref<string>()
+  const messagePost = ref<string>()
   /** watcher */
 
   //
@@ -43,8 +48,6 @@ export const useOperatorStore = defineStore('operator-store', () => {
 
     return data.tasks
   })
-
-  
 
   const currentUserName = computed(() => selectUsername())
 
@@ -66,6 +69,29 @@ export const useOperatorStore = defineStore('operator-store', () => {
   })
 
   /** Actions */
+  async function loadUsersAndTasks() {
+    try {
+      const { data } = await axios.get(`${pingUrl}`)
+      console.log(data)
+      operatorItems.value = data.users
+    }
+    catch (e: any) {
+      console.error(e)
+      message.value = `err:${JSON.stringify(e)}`
+     
+    }
+  }
+
+  async function postTest(id: string) {
+    try {
+      return axios.post(`${pingUrl}/${id}`)
+    }
+    catch (e: any) {
+      console.error(e)
+      messagePost.value = `err:${JSON.stringify(e)}`
+    }
+  }
+
   function selectUserById(id: string) {
     currentUserId.value = id
   }
@@ -86,7 +112,11 @@ export const useOperatorStore = defineStore('operator-store', () => {
     operatorsToOptions,
     scanTime,
     nameAndTask,
+    message,
+    messagePost,
     selectUserById,
+    loadUsersAndTasks,
+    postTest
 
 
   }
