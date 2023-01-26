@@ -17,6 +17,6 @@ App.addListener('backButton', ({ canGoBack}) => {
   }
 })
 </script>
-<template class="bg-offWhite">
+<template>
   <router-view />
 </template>
