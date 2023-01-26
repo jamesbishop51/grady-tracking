@@ -38,19 +38,12 @@ function updateUser(e: Event) {
         <option value="">Select Task</option>
         <option v-for="options in store.currentUserTasks">{{ options.text }}</option>
       </select>
-      <div class="pt-4">
+      <div class="py-4">
         <GdButtonLink :to="`/tasks/${store.currentUserId}`">Set mode</GdButtonLink>
       </div>
 
     </div>
   </GdCard>
-    <!-- test code will be removed -->
-    <div>
-      <gdButton @click="store.loadUsersAndTasks">get users</gdButton>
-      {{ store.message }}
-    </div>
-
-    <gdButton @click="store.postTest(store.currentUserId)">test send</gdButton>
   </GdContainer>
 
 </template>

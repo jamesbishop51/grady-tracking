@@ -9,7 +9,7 @@ import { Icon } from '@iconify/vue'
 <template>
 
   <div class="flex flex-col h-screen">
-    <div class="flex items-start mt-1 md:col-span-5 md:mt-0 border-b-2">
+    <div class="flex items-start mt-1 md:col-span-5 md:mt-0 border-b-2 bg-white">
       <RouterLink to="/">
         <Icon class="flex-1 text-secondary" height="3em" icon="material-symbols:home-outline" />
       </RouterLink>
@@ -21,11 +21,10 @@ import { Icon } from '@iconify/vue'
       </div>
     </main>
     <footer>
-      <GdContainer>
-        <div class="border-t border-gray-200 py-8 text-center text-sm text-gray-500 sm:text-left">
+      
+        <div class="border-t border-gray-200 py-4 text-center text-sm text-gray-500 sm:text-left bg-white">
           <span class="block sm:inline">Grady Door & Window Manufacturers</span>
         </div>
-      </GdContainer>
     </footer>
   </div>
 </template>

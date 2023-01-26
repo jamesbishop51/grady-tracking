@@ -12,16 +12,16 @@ const store = useOperatorStore()
 
 <template>
   <div>
-    <GdCard>
     <GdContainer>
-      <div class="p-4 grid gap-4 sm:grid-cols-3">
-        <h5 v-if="store.selectedUser" class="text-2xl font-bold tracking-tight">{{store.nameAndTask}}</h5>
-        <GdButtonLink  :to="`/tasks/${id}/scan-barcode`">Scan Barcode</GdButtonLink>
-        <GdButtonLink  to="/">Error List</GdButtonLink>
-        <GdButtonLink  to="/">Scan History</GdButtonLink>
-        <GdButtonLink  to="/">Change User</GdButtonLink>
-      </div>
+      <GdCard>
+        <h5 v-if="store.selectedUser" class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.nameAndTask }}</h5>
+        <div class="p-4 grid gap-4 sm:grid-cols-4">
+          <GdButtonLink :to="`/tasks/${id}/scan-barcode`">Scan Barcode</GdButtonLink>
+          <GdButtonLink to="/">Error List</GdButtonLink>
+          <GdButtonLink to="/">Scan History</GdButtonLink>
+          <GdButtonLink to="/">Change User</GdButtonLink>
+        </div>
+      </GdCard>
     </GdContainer>
-  </GdCard>
   </div>
 </template>

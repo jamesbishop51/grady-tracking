@@ -29,7 +29,7 @@ export interface SelectedUser {
 
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
-  const operatorItems = ref<Operators[]>([])
+  const operatorItems = ref<Operators[]>(options)
   const currentUserId = ref<string>("")
   const currentUserTask = ref<string>("")
   const scanTime = ref<Date>()
@@ -65,7 +65,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
     if (!currentUserTask)
       return selectedUser.value.name
 
-    return `${selectedUser.value.name} - ${selectedUser.value.task}`
+    return `${selectedUser.value.name} | ${selectedUser.value.task}`
   })
 
   /** Actions */
@@ -73,7 +73,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
     try {
       const { data } = await axios.get(`${pingUrl}`)
       console.log(data)
-      operatorItems.value = data.users
+      // operatorItems.value = data.users
     }
     catch (e: any) {
       console.error(e)

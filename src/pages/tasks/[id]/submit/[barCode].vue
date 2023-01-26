@@ -9,28 +9,35 @@ import GdTextInput from '~/components/gd-text-input.vue';
 
 const { barCode } = defineProps<{ barCode: string; id: string; }>()
 const store = useOperatorStore()
-const data = new Date()
+const date = new Date()
+
+function dateString(dateCompleted: string | Date | undefined) {
+  if (!dateCompleted) return ""
+
+  const date = new Date(dateCompleted)
+  return date.toLocaleString()
+}
 
 </script>
 <template>
-  <GdCard >
-    <div class="p-4 grid gap-4 sm:grid-cols-3">
-      <h1 class="text-4xl font-bold tracking-tight">{{store.nameAndTask}}</h1>
-      <h2 class="text-2xl font-bold tracking-tight pt-2">{{barCode}}</h2>
-
-      <div>
-        <GdLabel>Time</GdLabel>
-        <p>{{data}}</p>
+  <GdContainer>
+    <GdCard>
+      <div class="px-4">
+        <h1 class="text-3xl font-bold tracking-tight">{{ store.nameAndTask }}</h1>
+        <h2 class="text-2xl font-bold tracking-tight pt-2">{{ barCode }}</h2>
       </div>
-
-      <div>
-        <GdLabel>Extras (optional)</GdLabel>
-        <GdTextInput></GdTextInput>
+      <div class="p-4 grid gap-4 sm:grid-cols-3">
+        <div>
+          <GdLabel>Time</GdLabel>
+          <p>{{ dateString(date) }}</p>
+        </div>
+        <div>
+          <GdLabel>Extras (optional)</GdLabel>
+          <GdTextInput></GdTextInput>
+        </div>
+        <!-- <GdButtonLink to="/">Add image/video</GdButtonLink> -->
+        <GdButtonLink :to="`/tasks/${id}`">Submit</GdButtonLink>
       </div>
-
-      <!-- <GdButtonLink to="/">Add image/video</GdButtonLink> -->
-      <GdButtonLink :to="`/tasks/${id}`">Submit</GdButtonLink>
-    </div>
-  </GdCard>
-  
+    </GdCard>
+  </GdContainer>
 </template>
