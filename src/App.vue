@@ -1,9 +1,21 @@
 <script lang="ts" setup>
 import { App } from '@capacitor/app'
-import GdButtonLink from './components/gd-button-link.vue';
+import { onMounted } from 'vue';
+import { useOperatorStore } from './features/operators/operator-store';
+import { useRouter } from 'vue-router';
 
+const store = useOperatorStore()
+const router = useRouter()
 
 console.log('init test')
+
+onMounted(async () => {
+  // api code will be re enabled shortly
+  // await store.loadUsersAndTasks()
+  await store.loadUser()
+  if(store.selectedUser)
+  await router.push(`/tasks/${store.currentUserId}`)
+})
 
 App.addListener('backButton', ({ canGoBack}) => {
   if(!canGoBack) {
@@ -14,14 +26,5 @@ App.addListener('backButton', ({ canGoBack}) => {
 })
 </script>
 <template>
-  <div class="flex flex-col h-screen">
-    <h1 class="text-4xl font-bold tracking-tight text-secondary p-2 border-b-2">Grady Tracking App</h1>
-      <main class="p-2 flex-1 overflow-y-scroll">
-        <RouterView />
-      </main>
-      <footer>
-        <GdButtonLink to="/">Home</GdButtonLink>
-      </footer>
-    
-  </div>
+  <router-view />
 </template>

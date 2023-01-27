@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-defineProps<{ to: string, secondary?: boolean }>()
+defineProps<{ to: string }>()
 </script>
 
 <template>
-  <RouterLink :to="to" class="inline-flex items-center rounded-md border border-transparent 
-    px-4 py-2 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2" :class="secondary
-    ? 'bg-green-100 hover:bg-green-200'
-    : 'bg-secondary text-white hover:bg-secondary-hover focus:ring-secondary-hover'">
+  <RouterLink
+    :to="to"
+    class="flex w-full justify-center rounded-md border border-transparent bg-secondary py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-secondary-hover focus:outline-none focus:ring-2 focus:ring-secondary-hover focus:ring-offset-2"
+  >
     <slot />
   </RouterLink>
 </template>
