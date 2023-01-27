@@ -24,6 +24,8 @@ onUnmounted(() => {
 const barCode = ref<string>()
 const active = ref<boolean>(true)
 
+
+
 async function CheckPermissions() {
   const status = await BarcodeScanner.checkPermission({ force: true })
 
@@ -70,13 +72,13 @@ async function stopScan() {
         <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.nameAndTask }}</h5>
         <div class="p-4 grid gap-4 sm:grid-cols-3">
           <GdButton @click="startScan()">Scan Barcode</GdButton>
-          <form @submit.prevent="!barCode">
-          <div>
-            <GdLabel>Manual Entry</GdLabel>
-            <GdTextInput v-model="barCode"></GdTextInput>
-          </div>      
-          <GdButtonLink type="submit" class="mt-4" :to="`/tasks/${id}/submit/${barCode}`">Submit</GdButtonLink>
-        </form>
+          <form>
+            <div>
+              <GdLabel>Manual Entry</GdLabel>
+              <GdTextInput v-model="barCode"></GdTextInput>
+            </div>
+            <GdButtonLink type="submit" class="mt-4" :to="`/tasks/${id}/submit/${barCode}`">Submit</GdButtonLink>
+          </form>
         </div>
       </div>
       <div v-else class="grid">

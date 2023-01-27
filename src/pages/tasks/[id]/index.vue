@@ -18,7 +18,7 @@ const store = useOperatorStore()
         <div class="p-4 grid gap-4 sm:grid-cols-4">
           <GdButtonLink :to="`/tasks/${id}/scan-barcode`">Scan Barcode</GdButtonLink>
           <GdButtonLink to="/">Error List</GdButtonLink>
-          <GdButtonLink to="/">Scan History</GdButtonLink>
+          <GdButtonLink :to="`/tasks/${id}/scan-history/`">Scan History</GdButtonLink>
           <GdButtonLink @click="store.logOut" to="/">Change User</GdButtonLink>
         </div>
       </GdCard>

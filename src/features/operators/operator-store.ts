@@ -53,12 +53,6 @@ export const useOperatorStore = defineStore('operator-store', () => {
 
   const currentUserName = computed(() => selectUsername())
 
-  // const setUser = computed<SelectedUser>(() => ({
-  //   name: currentUserName.value,
-  //   id: currentUserId.value,
-  //   task: currentUserTask.value
-  // }))
-
   const selectedUser = computed<SelectedUser>(() => ({
     name: currentUserName.value,
     id: currentUserId.value,
@@ -77,27 +71,27 @@ export const useOperatorStore = defineStore('operator-store', () => {
   })
 
   /** Actions */
-  async function loadUsersAndTasks() {
-    try {
-      const { data } = await axios.get(`${pingUrl}`)
-      console.log(data)
-    }
-    catch (e: any) {
-      console.error(e)
-      message.value = `err:${JSON.stringify(e)}`
+  // async function loadUsersAndTasks() {
+  //   try {
+  //     const { data } = await axios.get(`${pingUrl}`)
+  //     console.log(data)
+  //   }
+  //   catch (e: any) {
+  //     console.error(e)
+  //     message.value = `err:${JSON.stringify(e)}`
 
-    }
-  }
+  //   }
+  // }
 
-  async function postTest(id: string) {
-    try {
-      return axios.post(`${pingUrl}/${id}`)
-    }
-    catch (e: any) {
-      console.error(e)
-      messagePost.value = `err:${JSON.stringify(e)}`
-    }
-  }
+  // async function postTest(id: string) {
+  //   try {
+  //     return axios.post(`${pingUrl}/${id}`)
+  //   }
+  //   catch (e: any) {
+  //     console.error(e)
+  //     messagePost.value = `err:${JSON.stringify(e)}`
+  //   }
+  // }
 
   function selectUserById(id: string) {
     currentUserId.value = id
@@ -146,8 +140,8 @@ export const useOperatorStore = defineStore('operator-store', () => {
     messagePost,
     selectUserById,
     loadUser,
-    loadUsersAndTasks,
-    postTest,
+    // loadUsersAndTasks,
+    // postTest,
     setUser,
     logOut
 

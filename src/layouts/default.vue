@@ -2,7 +2,10 @@
 import { RouterView } from 'vue-router'
 import GdContainer from '../components/gd-container.vue'
 import { Icon } from '@iconify/vue'
+import { useOperatorStore } from '~/features/operators/operator-store';
 
+
+const store = useOperatorStore()
 
 </script>
 
@@ -10,7 +13,7 @@ import { Icon } from '@iconify/vue'
 
   <div class="flex flex-col h-screen">
     <div class="flex items-start mt-1 md:col-span-5 md:mt-0 border-b-2 bg-white">
-      <RouterLink to="/">
+      <RouterLink :to="`/tasks/${store.currentUserId}`">
         <Icon class="flex-1 text-secondary" height="3em" icon="material-symbols:home-outline" />
       </RouterLink>
       <h1 class="text-4xl font-bold tracking-tight text-secondary p-2 flex-3">Grady Tracking App</h1>
