@@ -19,7 +19,7 @@ const store = useOperatorStore()
           <GdButtonLink :to="`/tasks/${id}/scan-barcode`">Scan Barcode</GdButtonLink>
           <GdButtonLink to="/">Error List</GdButtonLink>
           <GdButtonLink to="/">Scan History</GdButtonLink>
-          <GdButtonLink to="/">Change User</GdButtonLink>
+          <GdButtonLink @click="store.logOut" to="/">Change User</GdButtonLink>
         </div>
       </GdCard>
     </GdContainer>

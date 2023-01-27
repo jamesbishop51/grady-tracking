@@ -1,6 +1,7 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { options } from './operator-options';
+import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 
 // const pingUrl = "https://jsonplaceholder.typicode.com/todos/1"
@@ -35,6 +36,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
   const scanTime = ref<Date>()
   const message = ref<string>()
   const messagePost = ref<string>()
+  const user = ref<SelectedUser>()
   /** watcher */
 
   //
@@ -51,6 +53,12 @@ export const useOperatorStore = defineStore('operator-store', () => {
 
   const currentUserName = computed(() => selectUsername())
 
+  // const setUser = computed<SelectedUser>(() => ({
+  //   name: currentUserName.value,
+  //   id: currentUserId.value,
+  //   task: currentUserTask.value
+  // }))
+
   const selectedUser = computed<SelectedUser>(() => ({
     name: currentUserName.value,
     id: currentUserId.value,
@@ -65,7 +73,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
     if (!currentUserTask)
       return selectedUser.value.name
 
-    return `${selectedUser.value.name} | ${selectedUser.value.task}`
+    return `${user.value?.name} | ${user.value?.task}`
   })
 
   /** Actions */
@@ -73,12 +81,11 @@ export const useOperatorStore = defineStore('operator-store', () => {
     try {
       const { data } = await axios.get(`${pingUrl}`)
       console.log(data)
-      // operatorItems.value = data.users
     }
     catch (e: any) {
       console.error(e)
       message.value = `err:${JSON.stringify(e)}`
-     
+
     }
   }
 
@@ -102,6 +109,28 @@ export const useOperatorStore = defineStore('operator-store', () => {
     return data.name
   }
 
+  async function loadUser() {
+      const PreviouslyLoggedIN = await get("user")
+      const user1 = JSON.parse(PreviouslyLoggedIN)
+      selectUserById(user1.id)
+      user.value = user1
+  }
+
+  async function setUser() {
+    if (!currentUserId.value) throw Error("something broke")
+
+    console.log(JSON.stringify(selectedUser.value))
+    await set("user", JSON.stringify(selectedUser.value))
+    loadUser()
+
+  }
+
+  async function logOut() {
+    const test = await get("user")
+    console.log(JSON.parse(test))
+    await del("user")
+  }
+
   return {
     operatorItems,
     selectedUser,
@@ -112,12 +141,15 @@ export const useOperatorStore = defineStore('operator-store', () => {
     operatorsToOptions,
     scanTime,
     nameAndTask,
+    user,
     message,
     messagePost,
     selectUserById,
+    loadUser,
     loadUsersAndTasks,
-    postTest
-
+    postTest,
+    setUser,
+    logOut
 
   }
 });
