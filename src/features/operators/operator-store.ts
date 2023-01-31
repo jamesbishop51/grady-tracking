@@ -29,14 +29,10 @@ export interface SelectedUser {
 }
 
 export interface TaskEntry {
+  userId: string
   task: string
   comments?: string
   batchNo: string
-}
-
-export interface TaskReport {
-  entries: TaskEntry[]
-  dateSubmitted: string
 }
 
 export const useOperatorStore = defineStore('operator-store', () => {
@@ -45,10 +41,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
   const currentUserId = ref<string>("")
   const currentUserTask = ref<string>("")
   const taskEntries = ref<TaskEntry[]>([])
-  const taskHistory = ref<TaskReport[]>([])
   const scanTime = ref<Date>()
-  const message = ref<string>()
-  const messagePost = ref<string>()
   const user = ref<SelectedUser>()
   const scannedBarcode = ref<string>()
   /** watcher */
@@ -72,8 +65,6 @@ export const useOperatorStore = defineStore('operator-store', () => {
     id: currentUserId.value,
     task: currentUserTask.value
   }))
-
-  
 
   const operatorsToOptions = computed<SelectOption[]>(() =>
     operatorItems.value.map(o => ({ text: o.name, value: o.id })),
@@ -106,8 +97,8 @@ export const useOperatorStore = defineStore('operator-store', () => {
   }
 
   async function loadUser() {
-    const PreviouslyLoggedIN = await get("user")
-    const previousUser = JSON.parse(PreviouslyLoggedIN)
+    const previouslyLoggedIN = await get("user")
+    const previousUser = JSON.parse(previouslyLoggedIN)
     selectUserById(previousUser.id)
     user.value = previousUser
   }
@@ -115,9 +106,8 @@ export const useOperatorStore = defineStore('operator-store', () => {
   async function setUser() {
     if (!currentUserId.value) throw Error("something broke Users")  // replace with proper error later
 
-    await set("user", JSON.stringify(selectedUser.value))
+    await set("user", selectedUser.value)
     loadUser()
-
   }
 
   async function logOut() {
@@ -126,8 +116,6 @@ export const useOperatorStore = defineStore('operator-store', () => {
 
   async function completeTask() {
     if (!currentUserId.value) throw Error("something broke Tasks") // replace with proper error later
-
-
 
     const previousTaskJson = await get<string>(currentUserId.value)
     const previousTasks = JSON.parse(previousTaskJson || '[]');

@@ -70,7 +70,7 @@ async function stopScan() {
       <div v-if="active">
         <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.nameAndTask }}</h5>
         <div class="p-4 grid gap-4 sm:grid-cols-3">
-          <GdButton @click="startScan()">Scan Barcode</GdButton>
+          <GdButton class="mt-4" @click="startScan()">Scan Barcode</GdButton>
           <div>
             <GdLabel>Manual Entry</GdLabel>
             <GdTextInput placeholder="DB-" v-model="store.scannedBarcode"></GdTextInput>
