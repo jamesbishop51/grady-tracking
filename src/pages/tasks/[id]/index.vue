@@ -14,7 +14,7 @@ const store = useOperatorStore()
   <div>
     <GdContainer>
       <GdCard>
-        <h5 v-if="store.selectedUser" class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.nameAndTask }}</h5>
+        <h5 v-if="store.currentUser" class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.currentUser.name }} | {{ store.currentUser.task }}</h5>
         <div class="p-4 grid gap-4 sm:grid-cols-4">
           <GdButtonLink :to="`/tasks/${id}/scan-barcode`">Scan Barcode</GdButtonLink>
           <GdButtonLink to="/">Error List</GdButtonLink>

@@ -2,17 +2,23 @@
 import GdContainer from '~/components/gd-container.vue';
 import { useOperatorStore } from '~/features/operators/operator-store';
 import GdLabel from '~/components/gd-label.vue';
-import GdButtonLink from '~/components/gd-button-link.vue';
+import GdButton from '~/components/gd-button.vue';
 import GdCard from '~/components/gd-card.vue';
+import {useRouter } from 'vue-router';
 
 const store = useOperatorStore()
-const id = store.operatorItems
+const router = useRouter()
 
 function updateUser(e: Event) {
   const value = (e.target as HTMLSelectElement).value
   store.selectUserById(value)
 }
 
+function saveLocalUser() {
+  store.setUser()
+  router.push(`/tasks/${store.currentUser?.id}`)
+}
+ 
 </script>
 
 <template>
@@ -31,13 +37,14 @@ function updateUser(e: Event) {
 
         <GdLabel class="pt-4">Tasks</GdLabel>
         <select class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-secondary 
-        focus:outline-none focus:ring-secondary sm:text-sm" v-model="store.currentUserTask">
+        focus:outline-none focus:ring-secondary sm:text-sm" v-model="store.currentUser.task" >
           <option value="">Select Task</option>
           <option v-for="options in store.currentUserTasks">{{ options.text }}</option>
         </select>
 
+        
         <div class="py-4">
-          <GdButtonLink @click="store.setUser" :to="`/tasks/${store.currentUserId}`">Set mode</GdButtonLink>
+          <GdButton @click="saveLocalUser">Set mode</GdButton>
         </div>
 
       </div>

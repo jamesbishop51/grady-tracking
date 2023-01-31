@@ -4,9 +4,7 @@ import { options } from './operator-options';
 import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 
-// const pingUrl = "https://jsonplaceholder.typicode.com/todos/1"
 const pingUrl = "https://localhost:58441/api/task"
-// const pingUrl = "http://http://192.168.41.72:58441/:58441/api/ping"
 export interface Operators {
   name: string
   id: string
@@ -38,7 +36,8 @@ export interface TaskEntry {
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
   const operatorItems = ref<Operators[]>(options)
-  const currentUser = ref<SelectedUser>()
+  const currentUser = ref<SelectedUser>({ name: "", id: "", task: "" })
+  const scannedBarcode = ref<string>()
 
   /** Getters */
   const currentUserTasks = computed<TaskItems[]>(() => {
@@ -58,16 +57,20 @@ export const useOperatorStore = defineStore('operator-store', () => {
   /** Actions */
   async function selectUserById(id: string) {
     const name = operatorItems.value.find(d => d.id === id)?.name ?? ''
+
     currentUser.value = {
       id,
-      name
+      name,
     }
-    await set("user", JSON.stringify(currentUser.value))
   }
 
   async function selectTask(task: string) {
     if (currentUser.value)
       currentUser.value.task = task
+  }
+
+  async function setUser() {
+    await set("user", JSON.stringify(currentUser.value))
   }
 
   async function loadUserLocalUser() {
@@ -92,12 +95,14 @@ export const useOperatorStore = defineStore('operator-store', () => {
   return {
     operatorItems,
     currentUser,
+    scannedBarcode,
     currentUserTasks,
     operatorsToOptions,
     loadUsersAndTasks,
     loadUserLocalUser,
     selectUserById,
     selectTask,
+    setUser,
     postBarcode,
     logOut
   }

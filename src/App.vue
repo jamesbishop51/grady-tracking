@@ -12,9 +12,9 @@ console.log('init test')
 onMounted(async () => {
   // api code will be re enabled shortly
   // await store.loadUsersAndTasks()
-  await store.loadUser()
-  if(store.selectedUser)
-  await router.push(`/tasks/${store.currentUserId}`)
+   await store.loadUserLocalUser()
+  if(store.currentUser)
+  await router.push(`/tasks/${store.currentUser.id}`)
 })
 
 App.addListener('backButton', ({ canGoBack}) => {

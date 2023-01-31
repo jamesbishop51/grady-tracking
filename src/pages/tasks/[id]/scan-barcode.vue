@@ -13,19 +13,13 @@ const { id } = defineProps<{ id: string }>()
 
 const store = useOperatorStore()
 
-onMounted(() => {
-
-})
-
 onUnmounted(() => {
   stopScan()
 })
 
 const active = ref<boolean>(true)
 
-
-
-async function CheckPermissions() {
+async function checkPermissions() {
   const status = await BarcodeScanner.checkPermission({ force: true })
 
   if (status.granted) {
@@ -44,7 +38,7 @@ async function CheckPermissions() {
 }
 
 async function startScan() {
-  const allowed = await CheckPermissions();
+  const allowed = await checkPermissions();
   active.value = false
   if (allowed) {
     BarcodeScanner.hideBackground();
@@ -68,7 +62,7 @@ async function stopScan() {
   <GdContainer>
     <GdCard>
       <div v-if="active">
-        <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.nameAndTask }}</h5>
+        <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.currentUser?.name }} | {{ store.currentUser?.task }}</h5>
         <div class="p-4 grid gap-4 sm:grid-cols-3">
           <GdButton class="mt-4" @click="startScan()">Scan Barcode</GdButton>
           <div>
