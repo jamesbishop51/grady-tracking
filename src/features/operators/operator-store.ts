@@ -8,12 +8,12 @@ import axios from 'axios'
 const pingUrl = "https://localhost:58441/api/task"
 // const pingUrl = "http://http://192.168.41.72:58441/:58441/api/ping"
 export interface Operators {
-  name: string,
-  id: string,
+  name: string
+  id: string
   tasks: TaskItems[]
 }
 export interface TaskItems {
-  taskKey: string,
+  taskKey: string
   text: string
 }
 
@@ -23,9 +23,20 @@ export interface SelectOption {
 }
 
 export interface SelectedUser {
-  name?: string,
-  id?: string,
+  name?: string
+  id?: string
   task?: string
+}
+
+export interface TaskEntry {
+  task: string
+  comments?: string
+  batchNo: string
+}
+
+export interface TaskReport {
+  entries: TaskEntry[]
+  dateSubmitted: string
 }
 
 export const useOperatorStore = defineStore('operator-store', () => {
@@ -33,10 +44,13 @@ export const useOperatorStore = defineStore('operator-store', () => {
   const operatorItems = ref<Operators[]>(options)
   const currentUserId = ref<string>("")
   const currentUserTask = ref<string>("")
+  const taskEntries = ref<TaskEntry[]>([])
+  const taskHistory = ref<TaskReport[]>([])
   const scanTime = ref<Date>()
   const message = ref<string>()
   const messagePost = ref<string>()
   const user = ref<SelectedUser>()
+  const scannedBarcode = ref<string>()
   /** watcher */
 
   //
@@ -59,6 +73,8 @@ export const useOperatorStore = defineStore('operator-store', () => {
     task: currentUserTask.value
   }))
 
+  
+
   const operatorsToOptions = computed<SelectOption[]>(() =>
     operatorItems.value.map(o => ({ text: o.name, value: o.id })),
   )
@@ -71,10 +87,76 @@ export const useOperatorStore = defineStore('operator-store', () => {
   })
 
   /** Actions */
+
+  function resetTasks() {
+    taskEntries.value = [{
+      task:"",
+      batchNo:""
+    }]
+  }
+
+  function selectUserById(id: string) {
+    currentUserId.value = id
+  }
+
+  function selectUsername() {
+    const data = operatorItems.value.find(d => d.id === currentUserId.value)
+    if (!data) return ""
+    return data.name
+  }
+
+  async function loadUser() {
+    const PreviouslyLoggedIN = await get("user")
+    const previousUser = JSON.parse(PreviouslyLoggedIN)
+    selectUserById(previousUser.id)
+    user.value = previousUser
+  }
+
+  async function setUser() {
+    if (!currentUserId.value) throw Error("something broke Users")  // replace with proper error later
+
+    await set("user", JSON.stringify(selectedUser.value))
+    loadUser()
+
+  }
+
+  async function logOut() {
+    await del("user")
+  }
+
+  async function completeTask() {
+    if (!currentUserId.value) throw Error("something broke Tasks") // replace with proper error later
+
+
+
+    const previousTaskJson = await get<string>(currentUserId.value)
+    const previousTasks = JSON.parse(previousTaskJson || '[]');
+
+    previousTasks.unshift({
+      entries: taskEntries.value,
+      dateSubmitted: new Date()
+    })
+
+    await set(currentUserId.value, JSON.stringify(previousTasks))
+
+    resetTasks()
+
+  }
+
+  async function loadTaskHistory(id: string) {
+    const previousTaskJson = await get<string>(id)
+    const previousTasks = JSON.parse(previousTaskJson || '[]')
+    taskHistory.value = previousTasks;
+  }
+
+
+
   // async function loadUsersAndTasks() {
   //   try {
   //     const { data } = await axios.get(`${pingUrl}`)
   //     console.log(data)
+  //     message.value = data
+  //     operatorItems.value = data.users
   //   }
   //   catch (e: any) {
   //     console.error(e)
@@ -93,38 +175,6 @@ export const useOperatorStore = defineStore('operator-store', () => {
   //   }
   // }
 
-  function selectUserById(id: string) {
-    currentUserId.value = id
-  }
-
-  function selectUsername() {
-    const data = operatorItems.value.find(d => d.id === currentUserId.value)
-    if (!data) return ""
-    return data.name
-  }
-
-  async function loadUser() {
-      const PreviouslyLoggedIN = await get("user")
-      const user1 = JSON.parse(PreviouslyLoggedIN)
-      selectUserById(user1.id)
-      user.value = user1
-  }
-
-  async function setUser() {
-    if (!currentUserId.value) throw Error("something broke")
-
-    console.log(JSON.stringify(selectedUser.value))
-    await set("user", JSON.stringify(selectedUser.value))
-    loadUser()
-
-  }
-
-  async function logOut() {
-    const test = await get("user")
-    console.log(JSON.parse(test))
-    await del("user")
-  }
-
   return {
     operatorItems,
     selectedUser,
@@ -136,10 +186,15 @@ export const useOperatorStore = defineStore('operator-store', () => {
     scanTime,
     nameAndTask,
     user,
+    taskEntries,
+    taskHistory,
     message,
+    scannedBarcode,
     messagePost,
     selectUserById,
+    completeTask,
     loadUser,
+    loadTaskHistory,
     // loadUsersAndTasks,
     // postTest,
     setUser,
