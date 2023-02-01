@@ -12,13 +12,16 @@ const router = useRouter()
 function updateUser(e: Event) {
   const value = (e.target as HTMLSelectElement).value
   store.selectUserById(value)
+  console.log(store.operatorItems)
 }
 
 function saveLocalUser() {
   store.setUser()
   router.push(`/tasks/${store.currentUser?.id}`)
 }
- 
+function test() {
+  console.log(store.operatorItems)
+}
 </script>
 
 <template>
@@ -45,6 +48,8 @@ function saveLocalUser() {
         
         <div class="py-4">
           <GdButton @click="saveLocalUser">Set mode</GdButton>
+          <GdButton @click="test">test</GdButton>
+
         </div>
 
       </div>

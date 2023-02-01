@@ -4,7 +4,7 @@ import { options } from './operator-options';
 import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 
-const pingUrl = "https://localhost:58441/api/task"
+const pingUrl = "https://localhost:55489/api/task"
 export interface Operators {
   name: string
   id: string
@@ -30,14 +30,15 @@ export interface TaskEntry {
   userId: string
   task: string
   comments?: string
-  batchNo: string
+  batchNo?: string
+  dateScanned?: string
 }
 
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
-  const operatorItems = ref<Operators[]>(options)
+  const operatorItems = ref<Operators[]>([])
   const currentUser = ref<SelectedUser>({ name: "", id: "", task: "" })
-  const scannedBarcode = ref<string>()
+  const scannedBarcode = ref<string>("DB-")
 
   /** Getters */
   const currentUserTasks = computed<TaskItems[]>(() => {
@@ -57,7 +58,6 @@ export const useOperatorStore = defineStore('operator-store', () => {
   /** Actions */
   async function selectUserById(id: string) {
     const name = operatorItems.value.find(d => d.id === id)?.name ?? ''
-
     currentUser.value = {
       id,
       name,
@@ -80,12 +80,14 @@ export const useOperatorStore = defineStore('operator-store', () => {
   }
 
   async function loadUsersAndTasks() {
-    const { data } = await axios.get<Operators[]>(`${pingUrl}`)
-    operatorItems.value = data
+    const { data } = await axios.get<{ operators: Operators[] }>(`${pingUrl}`)
+    console.log(data)
+    operatorItems.value = data.operators
   }
 
-  function postBarcode(entry: TaskEntry) {
-    return axios.post(`${pingUrl}`, entry)
+  function postBarcode(comments: any) {
+    axios.post(`${pingUrl}`, ({ userId: currentUser.value.id, task: currentUser.value.task, batchNo: scannedBarcode.value, comments: comments }))
+    scannedBarcode.value = 'DB-'
   }
 
   async function logOut() {
@@ -95,8 +97,8 @@ export const useOperatorStore = defineStore('operator-store', () => {
   return {
     operatorItems,
     currentUser,
-    scannedBarcode,
     currentUserTasks,
+    scannedBarcode,
     operatorsToOptions,
     loadUsersAndTasks,
     loadUserLocalUser,

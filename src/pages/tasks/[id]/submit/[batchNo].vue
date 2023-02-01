@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useOperatorStore } from '~/features/operators/operator-store';
+import { ref } from 'vue';
 import GdButtonLink from '~/components/gd-button-link.vue';
 import GdButton from '~/components/gd-button.vue';
 import GdCard from '~/components/gd-card.vue';
@@ -14,7 +15,7 @@ const store = useOperatorStore()
 
 const router = useRouter()
 const date = new Date()
-
+const comments = ref('')
 
 function dateString(dateCompleted: string | Date | undefined) {
   if (!dateCompleted) return ""
@@ -24,7 +25,7 @@ function dateString(dateCompleted: string | Date | undefined) {
 }
 
 async function complete() {
-  await store.completeTask()
+  await store.postBarcode(comments.value)
   await router.push(`/tasks/${id}`)
 }
 
@@ -33,19 +34,19 @@ async function complete() {
   <GdContainer>
     <GdCard>
       <div class="px-4 pt-4">
-        <h1 class="text-3xl font-bold tracking-tight">{{ store.nameAndTask }}</h1>
+        <h1 class="text-3xl font-bold tracking-tight">{{ store.currentUser?.name }} | {{ store.currentUser?.task }}</h1>
         <h2 class="text-2xl font-bold tracking-tight pt-2">{{ store.scannedBarcode }}</h2>
       </div>
-      <div class="p-4 grid gap-4 sm:grid-cols-3">
+      <div class="p-4 grid gap-4 sm:grid-cols-4">
         <div>
           <GdLabel>Time</GdLabel>
           <p>{{ dateString(date) }}</p>
         </div>
-        <div v-for="(entry, index) in store.taskEntries" :key="index">
+        <div>
           <GdLabel>Extras (optional)</GdLabel>
-          <GdTextInput v-model="entry.comments"></GdTextInput>
+          <GdTextInput v-model="comments"></GdTextInput>
         </div>
-        <GdButtonLink disabled to="">Add image/video</GdButtonLink>
+        <GdButtonLink to="">Add image/video</GdButtonLink>
         <GdButton @click="complete()">Submit</GdButton>
       </div>
     </GdCard>

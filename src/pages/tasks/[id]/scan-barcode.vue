@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner'
 import GdTextInput from '~/components/gd-text-input.vue';
 import GdLabel from '~/components/gd-label.vue';
@@ -18,7 +18,6 @@ onUnmounted(() => {
 })
 
 const active = ref<boolean>(true)
-
 async function checkPermissions() {
   const status = await BarcodeScanner.checkPermission({ force: true })
 
@@ -69,7 +68,7 @@ async function stopScan() {
             <GdLabel>Manual Entry</GdLabel>
             <GdTextInput placeholder="DB-" v-model="store.scannedBarcode"></GdTextInput>
           </div>
-          <GdButtonLink class="mt-4" :to="`/tasks/${id}/submit/${id}`">Submit</GdButtonLink>
+          <GdButtonLink class="mt-4" :to="`/tasks/${id}/submit/${store.scannedBarcode}`">Submit</GdButtonLink>
         </div>
       </div>
       <div v-else class="grid">
