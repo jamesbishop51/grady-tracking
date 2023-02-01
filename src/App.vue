@@ -14,7 +14,6 @@ onMounted(async () => {
 
   await store.loadUsersAndTasks()
   await store.loadUserLocalUser()
-  
 
   if (store.currentUser)
     await router.push(`/tasks/${store.currentUser.id}`)

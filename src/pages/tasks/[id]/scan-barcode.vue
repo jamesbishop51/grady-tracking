@@ -61,7 +61,9 @@ async function stopScan() {
   <GdContainer>
     <GdCard>
       <div v-if="active">
-        <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.currentUser?.name }} | {{ store.currentUser?.task }}</h5>
+        <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.currentUser?.name }} | {{
+          store.currentUser?.task
+        }}</h5>
         <div class="p-4 grid gap-4 sm:grid-cols-3">
           <GdButton class="mt-4" @click="startScan()">Scan Barcode</GdButton>
           <div>

@@ -19,9 +19,7 @@ function saveLocalUser() {
   store.setUser()
   router.push(`/tasks/${store.currentUser?.id}`)
 }
-function test() {
-  console.log(store.operatorItems)
-}
+
 </script>
 
 <template>
@@ -45,11 +43,8 @@ function test() {
           <option v-for="options in store.currentUserTasks">{{ options.text }}</option>
         </select>
 
-        
         <div class="py-4">
           <GdButton @click="saveLocalUser">Set mode</GdButton>
-          <GdButton @click="test">test</GdButton>
-
         </div>
 
       </div>
