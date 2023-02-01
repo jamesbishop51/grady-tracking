@@ -4,7 +4,7 @@ import { options } from './operator-options';
 import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 
-const pingUrl = "https://localhost:55489/api/task"
+const pingUrl = "https://dev.grady-admin.nebule.software/net-api/task"
 export interface Operators {
   name: string
   id: string

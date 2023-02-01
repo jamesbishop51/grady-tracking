@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router';
 import GdContainer from '~/components/gd-container.vue';
 import GdLabel from '~/components/gd-label.vue';
 import GdTextInput from '~/components/gd-text-input.vue';
+import { Toast } from '@capacitor/toast'
 
 const { id } = defineProps<{ id: string }>()
 
@@ -25,8 +26,12 @@ function dateString(dateCompleted: string | Date | undefined) {
 }
 
 async function complete() {
+  await Toast.show({
+    text: `${store.scannedBarcode} Submitted`
+  })
   await store.postBarcode(comments.value)
-  await router.push(`/tasks/${id}`)
+  
+  await router.push(`/tasks/${id}/scan-barcode`)
 }
 
 </script>
@@ -46,7 +51,7 @@ async function complete() {
           <GdLabel>Extras (optional)</GdLabel>
           <GdTextInput v-model="comments"></GdTextInput>
         </div>
-        <GdButtonLink to="">Add image/video</GdButtonLink>
+       
         <GdButton @click="complete()">Submit</GdButton>
       </div>
     </GdCard>
