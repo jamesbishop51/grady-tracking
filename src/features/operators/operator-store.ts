@@ -4,16 +4,14 @@ import { options } from './operator-options';
 import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 
-// const pingUrl = "https://jsonplaceholder.typicode.com/todos/1"
-const pingUrl = "https://localhost:58441/api/task"
-// const pingUrl = "http://http://192.168.41.72:58441/:58441/api/ping"
+const pingUrl = "https://dev.grady-admin.nebule.software/net-api/task"
 export interface Operators {
-  name: string,
-  id: string,
+  name: string
+  id: string
   tasks: TaskItems[]
 }
 export interface TaskItems {
-  taskKey: string,
+  taskKey: string
   text: string
 }
 
@@ -23,134 +21,92 @@ export interface SelectOption {
 }
 
 export interface SelectedUser {
-  name?: string,
-  id?: string,
+  name: string
+  id: string
   task?: string
+}
+
+export interface TaskEntry {
+  userId: string
+  task: string
+  comments?: string
+  batchNo?: string
+  dateScanned?: string
 }
 
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
-  const operatorItems = ref<Operators[]>(options)
-  const currentUserId = ref<string>("")
-  const currentUserTask = ref<string>("")
-  const scanTime = ref<Date>()
-  const message = ref<string>()
-  const messagePost = ref<string>()
-  const user = ref<SelectedUser>()
-  /** watcher */
-
-  //
+  const operatorItems = ref<Operators[]>([])
+  const currentUser = ref<SelectedUser>({ name: "", id: "", task: "" })
+  const scannedBarcode = ref<string>("DB-")
 
   /** Getters */
   const currentUserTasks = computed<TaskItems[]>(() => {
-    if (!currentUserId) return []
+    if (!currentUser.value || !currentUser.value.id)
+      return []
 
-    const data = operatorItems.value.find(d => d.id === currentUserId.value)
+    const data = operatorItems.value.find(d => d.id === currentUser.value?.id)
     if (!data) return []
 
     return data.tasks
   })
 
-  const currentUserName = computed(() => selectUsername())
-
-  // const setUser = computed<SelectedUser>(() => ({
-  //   name: currentUserName.value,
-  //   id: currentUserId.value,
-  //   task: currentUserTask.value
-  // }))
-
-  const selectedUser = computed<SelectedUser>(() => ({
-    name: currentUserName.value,
-    id: currentUserId.value,
-    task: currentUserTask.value
-  }))
-
   const operatorsToOptions = computed<SelectOption[]>(() =>
     operatorItems.value.map(o => ({ text: o.name, value: o.id })),
   )
 
-  const nameAndTask = computed(() => {
-    if (!currentUserTask)
-      return selectedUser.value.name
-
-    return `${user.value?.name} | ${user.value?.task}`
-  })
-
   /** Actions */
-  async function loadUsersAndTasks() {
-    try {
-      const { data } = await axios.get(`${pingUrl}`)
-      console.log(data)
-    }
-    catch (e: any) {
-      console.error(e)
-      message.value = `err:${JSON.stringify(e)}`
-
+  async function selectUserById(id: string) {
+    const name = operatorItems.value.find(d => d.id === id)?.name ?? ''
+    currentUser.value = {
+      id,
+      name,
     }
   }
 
-  async function postTest(id: string) {
-    try {
-      return axios.post(`${pingUrl}/${id}`)
-    }
-    catch (e: any) {
-      console.error(e)
-      messagePost.value = `err:${JSON.stringify(e)}`
-    }
-  }
-
-  function selectUserById(id: string) {
-    currentUserId.value = id
-  }
-
-  function selectUsername() {
-    const data = operatorItems.value.find(d => d.id === currentUserId.value)
-    if (!data) return ""
-    return data.name
-  }
-
-  async function loadUser() {
-      const PreviouslyLoggedIN = await get("user")
-      const user1 = JSON.parse(PreviouslyLoggedIN)
-      selectUserById(user1.id)
-      user.value = user1
+  async function selectTask(task: string) {
+    if (currentUser.value)
+      currentUser.value.task = task
   }
 
   async function setUser() {
-    if (!currentUserId.value) throw Error("something broke")
+    await set("user", JSON.stringify(currentUser.value))
+  }
 
-    console.log(JSON.stringify(selectedUser.value))
-    await set("user", JSON.stringify(selectedUser.value))
-    loadUser()
+  async function loadUserLocalUser() {
+    const previouslyLoggedIN = await get("user")
+    const previousUser = JSON.parse(previouslyLoggedIN)
+    currentUser.value = previousUser
+  }
 
+  async function loadUsersAndTasks() {
+    const { data } = await axios.get<{ operators: Operators[] }>(`${pingUrl}`)
+    console.log(data)
+    operatorItems.value = data.operators
+  }
+
+  function postBarcode(comments: any) {
+    axios.post(`${pingUrl}`, ({ userId: currentUser.value.id, task: currentUser.value.task, batchNo: scannedBarcode.value, comments: comments }))
+    scannedBarcode.value = 'DB-'
   }
 
   async function logOut() {
-    const test = await get("user")
-    console.log(JSON.parse(test))
     await del("user")
   }
 
   return {
     operatorItems,
-    selectedUser,
-    currentUserName,
-    currentUserTask,
-    currentUserId,
+    currentUser,
     currentUserTasks,
+    scannedBarcode,
     operatorsToOptions,
-    scanTime,
-    nameAndTask,
-    user,
-    message,
-    messagePost,
-    selectUserById,
-    loadUser,
     loadUsersAndTasks,
-    postTest,
+    loadUserLocalUser,
+    selectUserById,
+    selectTask,
     setUser,
+    postBarcode,
     logOut
-
   }
 });
 

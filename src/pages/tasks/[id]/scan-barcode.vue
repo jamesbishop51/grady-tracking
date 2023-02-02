@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner'
 import GdTextInput from '~/components/gd-text-input.vue';
 import GdLabel from '~/components/gd-label.vue';
+import { useRouter } from 'vue-router';
 import GdButtonLink from '~/components/gd-button-link.vue';
 import { useOperatorStore } from '~/features/operators/operator-store';
 import GdButton from '~/components/gd-button.vue';
@@ -13,18 +14,14 @@ const { id } = defineProps<{ id: string }>()
 
 const store = useOperatorStore()
 
-onMounted(() => {
-
-})
+const router = useRouter()
 
 onUnmounted(() => {
   stopScan()
 })
 
-const barCode = ref<string>()
 const active = ref<boolean>(true)
-
-async function CheckPermissions() {
+async function checkPermissions() {
   const status = await BarcodeScanner.checkPermission({ force: true })
 
   if (status.granted) {
@@ -43,15 +40,16 @@ async function CheckPermissions() {
 }
 
 async function startScan() {
-  const allowed = await CheckPermissions();
+  const allowed = await checkPermissions();
   active.value = false
   if (allowed) {
     BarcodeScanner.hideBackground();
     const result = await BarcodeScanner.startScan();
 
     if (result.hasContent) {
-      barCode.value = result.content
-      stopScan();
+      store.scannedBarcode = result.content || ''
+      stopScan()
+      router.push(`/tasks/${id}/submit/${store.scannedBarcode}`)
     }
   }
 }
@@ -65,25 +63,31 @@ async function stopScan() {
 </script>
 <template>
   <GdContainer>
-    <GdCard>
-      <div v-if="active">
-        <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.nameAndTask }}</h5>
-        <div class="p-4 grid gap-4 sm:grid-cols-3">
-          <GdButton @click="startScan()">Scan Barcode</GdButton>
-          <form @submit.prevent="!barCode">
-          <div>
-            <GdLabel>Manual Entry</GdLabel>
-            <GdTextInput v-model="barCode"></GdTextInput>
-          </div>      
-          <GdButtonLink type="submit" class="mt-4" :to="`/tasks/${id}/submit/${barCode}`">Submit</GdButtonLink>
-        </form>
+    <div v-if="active">
+      <GdCard>
+        <div>
+          <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.currentUser?.name }} | {{
+            store.currentUser?.task
+          }}</h5>
+          <div class="p-4">
+            <GdButton class="mt-4" @click="startScan()">Scan Barcode</GdButton>
+          </div>
         </div>
-      </div>
-      <div v-else class="grid">
+      </GdCard>
+      <GdCard class="mt-20">
+        <div class="p-4">
+          <GdLabel>Manual Entry</GdLabel>
+          <GdTextInput placeholder="DB-" v-model="store.scannedBarcode"></GdTextInput>
+          <GdButtonLink :to="`/tasks/${id}/submit/${store.scannedBarcode}`" class="mt-4">Enter Manual Code
+          </GdButtonLink>
+        </div>
+      </GdCard>
+    </div>
+    <div v-else class="grid">
+      <GdCard>
         <GdButton class="ms-2" @click="stopScan()">Cancel Scan</GdButton>
-      </div>
-    </GdCard>
-
+      </GdCard>
+    </div>
   </GdContainer>
 
 

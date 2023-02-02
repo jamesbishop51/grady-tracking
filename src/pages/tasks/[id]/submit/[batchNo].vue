@@ -1,15 +1,22 @@
 <script lang="ts" setup>
-import { Ref } from 'vue';
 import { useOperatorStore } from '~/features/operators/operator-store';
+import { ref } from 'vue';
 import GdButtonLink from '~/components/gd-button-link.vue';
+import GdButton from '~/components/gd-button.vue';
 import GdCard from '~/components/gd-card.vue';
+import { useRouter } from 'vue-router';
 import GdContainer from '~/components/gd-container.vue';
 import GdLabel from '~/components/gd-label.vue';
 import GdTextInput from '~/components/gd-text-input.vue';
+import { Toast } from '@capacitor/toast'
 
-const { barCode } = defineProps<{ barCode: string; id: string; }>()
+const { id } = defineProps<{ id: string }>()
+
 const store = useOperatorStore()
+
+const router = useRouter()
 const date = new Date()
+const comments = ref('')
 
 function dateString(dateCompleted: string | Date | undefined) {
   if (!dateCompleted) return ""
@@ -18,25 +25,34 @@ function dateString(dateCompleted: string | Date | undefined) {
   return date.toLocaleString()
 }
 
+async function complete() {
+  await Toast.show({
+    text: `${store.scannedBarcode} Submitted`
+  })
+  await store.postBarcode(comments.value)
+  
+  await router.push(`/tasks/${id}/scan-barcode`)
+}
+
 </script>
 <template>
   <GdContainer>
     <GdCard>
       <div class="px-4 pt-4">
-        <h1 class="text-3xl font-bold tracking-tight">{{ store.nameAndTask }}</h1>
-        <h2 class="text-2xl font-bold tracking-tight pt-2">{{ barCode }}</h2>
+        <h1 class="text-3xl font-bold tracking-tight">{{ store.currentUser?.name }} | {{ store.currentUser?.task }}</h1>
+        <h2 class="text-2xl font-bold tracking-tight pt-2">{{ store.scannedBarcode }}</h2>
       </div>
-      <div class="p-4 grid gap-4 sm:grid-cols-3">
+      <div class="p-4 grid gap-4 sm:grid-cols-4">
         <div>
           <GdLabel>Time</GdLabel>
           <p>{{ dateString(date) }}</p>
         </div>
         <div>
           <GdLabel>Extras (optional)</GdLabel>
-          <GdTextInput></GdTextInput>
+          <GdTextInput v-model="comments"></GdTextInput>
         </div>
-        <GdButtonLink disabled to="">Add image/video</GdButtonLink>
-        <GdButtonLink :to="`/tasks/${id}`">Submit</GdButtonLink>
+       
+        <GdButton @click="complete()">Submit</GdButton>
       </div>
     </GdCard>
   </GdContainer>

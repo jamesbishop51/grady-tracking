@@ -11,16 +11,18 @@ console.log('init test')
 
 onMounted(async () => {
   // api code will be re enabled shortly
-  // await store.loadUsersAndTasks()
-  await store.loadUser()
-  if(store.selectedUser)
-  await router.push(`/tasks/${store.currentUserId}`)
+
+  await store.loadUsersAndTasks()
+  await store.loadUserLocalUser()
+
+  if (store.currentUser)
+    await router.push(`/tasks/${store.currentUser.id}`)
 })
 
-App.addListener('backButton', ({ canGoBack}) => {
-  if(!canGoBack) {
+App.addListener('backButton', ({ canGoBack }) => {
+  if (!canGoBack) {
     App.exitApp();
-  }else {
+  } else {
     window.history.back();
   }
 })

@@ -17,6 +17,7 @@
     "@capacitor/app": "^4.1.1",
     "@capacitor/cli": "^4.6.1",
     "@capacitor/core": "^4.6.1",
+    "@capacitor/toast": "^4.1.0",
     "@iconify/vue": "^4.0.2",
     "axios": "^1.2.4",
     "idb-keyval": "^6.2.0",
