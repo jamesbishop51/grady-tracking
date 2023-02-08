@@ -4,14 +4,14 @@ import { options } from './operator-options';
 import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 
-const pingUrl = "https://dev.grady-admin.nebule.software/net-api/task"
+//const pingUrl = "https://dev.grady-admin.nebule.software/net-api/task"
+const pingUrl = "https://localhost:58441/api/task"
 export interface Operators {
   name: string
   id: string
   tasks: TaskItems[]
 }
 export interface TaskItems {
-  taskKey: string
   text: string
 }
 
@@ -47,7 +47,6 @@ export const useOperatorStore = defineStore('operator-store', () => {
 
     const data = operatorItems.value.find(d => d.id === currentUser.value?.id)
     if (!data) return []
-
     return data.tasks
   })
 
@@ -80,17 +79,17 @@ export const useOperatorStore = defineStore('operator-store', () => {
   }
 
   async function loadUsersAndTasks() {
-    const { data } = await axios.get<{ operators: Operators[] }>(`${pingUrl}`)
-    console.log(data)
-    operatorItems.value = data.operators
+    const { data } = await axios.get(`${pingUrl}`)
+    operatorItems.value = data
   }
 
-  function postBarcode(comments: any) {
-    axios.post(`${pingUrl}`, ({ userId: currentUser.value.id, task: currentUser.value.task, batchNo: scannedBarcode.value, comments: comments }))
+  function postBarcode(comment: any) {
+    axios.post(`${pingUrl}`, ({ userId: currentUser.value.id, task: currentUser.value.task, batchNo: scannedBarcode.value, comment: comment }))
     scannedBarcode.value = 'DB-'
   }
 
   async function logOut() {
+    currentUser.value = { name: "", id: "", task: "" }
     await del("user")
   }
 

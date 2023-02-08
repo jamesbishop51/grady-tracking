@@ -5,7 +5,6 @@ import GdLabel from '~/components/gd-label.vue';
 import GdButton from '~/components/gd-button.vue';
 import GdCard from '~/components/gd-card.vue';
 import {useRouter } from 'vue-router';
-import GdSelect from '~/components/gd-select.vue';
 
 const store = useOperatorStore()
 const router = useRouter()
