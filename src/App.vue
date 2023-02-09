@@ -10,10 +10,8 @@ const router = useRouter()
 console.log('init test')
 
 onMounted(async () => {
-  // api code will be re enabled shortly
-
   await store.loadUsersAndTasks()
-  await store.loadUserLocalUser()
+  await store.loadLocalUser()
 
   if (store.currentUser)
     await router.push(`/tasks/${store.currentUser.id}`)

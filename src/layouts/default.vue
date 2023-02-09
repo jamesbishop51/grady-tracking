@@ -13,7 +13,7 @@ const store = useOperatorStore()
 
   <div class="flex flex-col h-screen">
     <div class="flex items-start mt-1 md:col-span-5 md:mt-0 border-b-2 bg-white">
-      <RouterLink :to="`/tasks/${store.currentUser.id}`">
+      <RouterLink v-if="store.currentUser.id !== ''" :to="`/tasks/${store.currentUser.id}`">
         <Icon class="flex-1 text-secondary" height="3em" icon="material-symbols:home-outline" />
       </RouterLink>
       <h1 class="text-4xl font-bold tracking-tight text-secondary p-2 flex-3">Grady Tracking App</h1>

@@ -1,11 +1,10 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { options } from './operator-options';
 import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 
-//const pingUrl = "https://dev.grady-admin.nebule.software/net-api/task"
-const pingUrl = "https://localhost:58441/api/task"
+const pingUrl = "https://dev.grady-admin.nebule.software/net-api/task"
+//const pingUrl = "https://localhost:58441/api/task"
 export interface Operators {
   name: string
   id: string
@@ -60,6 +59,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
     currentUser.value = {
       id,
       name,
+      task: "",
     }
   }
 
@@ -72,15 +72,20 @@ export const useOperatorStore = defineStore('operator-store', () => {
     await set("user", JSON.stringify(currentUser.value))
   }
 
-  async function loadUserLocalUser() {
+  async function loadLocalUser() {
     const previouslyLoggedIN = await get("user")
     const previousUser = JSON.parse(previouslyLoggedIN)
     currentUser.value = previousUser
   }
 
+  // async function loadUsersAndTasks() {
+  //   const { data } = await axios.get(`${pingUrl}`)
+  //   operatorItems.value = data
+  // }
   async function loadUsersAndTasks() {
-    const { data } = await axios.get(`${pingUrl}`)
-    operatorItems.value = data
+    const { data } = await axios.get<{ operators: Operators[] }>(`${pingUrl}`)
+    console.log(data)
+    operatorItems.value = data.operators
   }
 
   function postBarcode(comment: any) {
@@ -100,7 +105,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
     scannedBarcode,
     operatorsToOptions,
     loadUsersAndTasks,
-    loadUserLocalUser,
+    loadLocalUser,
     selectUserById,
     selectTask,
     setUser,

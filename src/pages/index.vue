@@ -4,7 +4,8 @@ import { useOperatorStore } from '~/features/operators/operator-store';
 import GdLabel from '~/components/gd-label.vue';
 import GdButton from '~/components/gd-button.vue';
 import GdCard from '~/components/gd-card.vue';
-import {useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { Toast } from '@capacitor/toast'
 
 const store = useOperatorStore()
 const router = useRouter()
@@ -16,8 +17,17 @@ function updateUser(e: Event) {
 }
 
 function saveLocalUser() {
-  store.setUser()
-  router.push(`/tasks/${store.currentUser?.id}`)
+  
+  if (store.currentUser.id === "" || store.currentUser.task === "") {
+    Toast.show({
+      text: "Please select a valid User and Task"
+    })
+  } else{
+    store.setUser()
+  router.push(`/tasks/${store.currentUser.id}`)
+  }
+  
+
 }
 
 </script>
@@ -38,7 +48,7 @@ function saveLocalUser() {
 
         <GdLabel class="pt-4">Tasks</GdLabel>
         <select class="mt-1 block w-full rounded-md outline outline-offset-1 outline-1 outline-secondary py-2 pl-3 pr-10 text-base focus:border-secondary 
-        focus:outline-none focus:ring-secondary sm:text-sm" v-model="store.currentUser.task" >
+        focus:outline-none focus:ring-secondary sm:text-sm" v-model="store.currentUser.task">
           <option value="">Select Task</option>
           <option v-for="options in store.currentUserTasks">{{ options.text }}</option>
         </select>
