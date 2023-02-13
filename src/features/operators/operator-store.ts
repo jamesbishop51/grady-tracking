@@ -78,15 +78,15 @@ export const useOperatorStore = defineStore('operator-store', () => {
     currentUser.value = previousUser
   }
 
-  // async function loadUsersAndTasks() {
-  //   const { data } = await axios.get(`${pingUrl}`)
-  //   operatorItems.value = data
-  // }
   async function loadUsersAndTasks() {
-    const { data } = await axios.get<{ operators: Operators[] }>(`${pingUrl}`)
-    console.log(data)
-    operatorItems.value = data.operators
+    const { data } = await axios.get(`${pingUrl}`)
+    operatorItems.value = data
   }
+  // async function loadUsersAndTasks() {
+  //   const { data } = await axios.get<{ operators: Operators[] }>(`${pingUrl}`)
+  //   console.log(data)
+  //   operatorItems.value = data.operators
+  // }
 
   function postBarcode(comment: any) {
     axios.post(`${pingUrl}`, ({ userId: currentUser.value.id, task: currentUser.value.task, batchNo: scannedBarcode.value, comment: comment }))

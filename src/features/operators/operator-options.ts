@@ -30,10 +30,8 @@ export const options: Operators[] = [
       text: "Painting Frames"
     }, {
       text: "Painting Sash"
-
     }, {
       text: "Painting SideLights"
-
     }]
   }
 ]
