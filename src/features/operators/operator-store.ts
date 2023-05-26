@@ -3,8 +3,8 @@ import { ref, computed } from 'vue'
 import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 
-//const pingUrl = "https://dev.grady-admin.nebule.software/net-api/task"
-const pingUrl = "https://localhost:62721/api/task"
+const pingUrl = "https://dev.grady-admin.nebule.software/net-api/task"
+//const pingUrl = "https://localhost:62721/api/task"
 export interface Operators {
   name: string
   id: string
