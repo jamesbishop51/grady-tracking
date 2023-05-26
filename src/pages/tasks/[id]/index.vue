@@ -18,9 +18,9 @@ const store = useOperatorStore()
           {{ store.currentUser.task }}</h5>
         <div class="p-4 grid gap-4 sm:grid-cols-2">
           <GdButtonLink :to="`/tasks/${id}/scan-barcode`">Scan Barcode</GdButtonLink>
-          <!-- <GdButtonLink to="/">Error List</GdButtonLink>
-          <GdButtonLink :to="`/tasks/${id}/scan-history/`">Scan History</GdButtonLink> -->
+          <!-- <GdButtonLink to="/">Error List</GdButtonLink> -->
           <GdButtonLink :to="`/tasks/${id}/scan-nfc`">Scan NFC</GdButtonLink>
+          <GdButtonLink :to="`/tasks/${id}/scan-history/`">Scan History</GdButtonLink>
           <GdButtonLink @click="store.logOut" to="/">Change User</GdButtonLink>
         </div>
 

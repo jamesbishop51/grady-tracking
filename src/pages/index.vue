@@ -27,10 +27,6 @@ function saveLocalUser() {
     router.push(`/tasks/${store.currentUser.id}`)
   }
 }
-
-function test() {
-  router.push(`/test`)
-}
 </script>
 
 <template>

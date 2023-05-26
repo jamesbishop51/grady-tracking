@@ -4,7 +4,7 @@ import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 
 const pingUrl = "https://dev.grady-admin.nebule.software/net-api/task"
-//const pingUrl = "https://localhost:58441/api/task"
+//const pingUrl = "https://localhost:62721/api/task"
 export interface Operators {
   name: string
   id: string
@@ -33,11 +33,22 @@ export interface TaskEntry {
   dateScanned?: string
 }
 
+export interface TaskHistory {
+  name: string
+  task: string
+  batchNo: string
+  dateScanned: string
+}
+
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
   const operatorItems = ref<Operators[]>([])
   const currentUser = ref<SelectedUser>({ name: "", id: "", task: "" })
   const scannedBarcode = ref<string>("DB-")
+  const taskHistory = ref<TaskHistory[]>([])
+
+  const currentPage = ref(1)
+  const take = ref(25)
 
   /** Getters */
   const currentUserTasks = computed<TaskItems[]>(() => {
@@ -54,6 +65,18 @@ export const useOperatorStore = defineStore('operator-store', () => {
   )
 
   /** Actions */
+  function nextPage() {
+    currentPage.value++
+    return loadTaskHistory()
+  }
+
+  function previousPage() {
+    if (currentPage.value < 1)
+      return
+
+    currentPage.value--
+    return loadTaskHistory()
+  }
   async function selectUserById(id: string) {
     const name = operatorItems.value.find(d => d.id === id)?.name ?? ''
     currentUser.value = {
@@ -82,11 +105,13 @@ export const useOperatorStore = defineStore('operator-store', () => {
     const { data } = await axios.get(`${pingUrl}`)
     operatorItems.value = data
   }
+
+  async function loadTaskHistory() {
+    const { data } = await axios.get(`${pingUrl}/task-history?userId=${currentUser.value.id}&pageNumber=${currentPage.value}&itemsPerPage=${take.value}`)
+    taskHistory.value = data;
+  }
   // async function loadUsersAndTasks() {
-  //   const { data } = await axios.get<{ operators: Operators[] }>(`${pingUrl}`)
-  //   console.log(data)
-  //   operatorItems.value = data.operators
-  // }
+
 
   function postBarcode(comment: any) {
     axios.post(`${pingUrl}`, ({ userId: currentUser.value.id, task: currentUser.value.task, batchNo: scannedBarcode.value, comment: comment }))
@@ -102,10 +127,15 @@ export const useOperatorStore = defineStore('operator-store', () => {
     operatorItems,
     currentUser,
     currentUserTasks,
+    currentPage,
+    taskHistory,
     scannedBarcode,
     operatorsToOptions,
     loadUsersAndTasks,
     loadLocalUser,
+    nextPage,
+    previousPage,
+    loadTaskHistory,
     selectUserById,
     selectTask,
     setUser,
@@ -115,5 +145,5 @@ export const useOperatorStore = defineStore('operator-store', () => {
 });
 
 if (import.meta.hot)
-//@ts-ignore
+  //@ts-ignore
   import.meta.hot.accept(acceptHMRUpdate(useOperatorStore, import.meta.hot))
