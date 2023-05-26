@@ -17,14 +17,14 @@ function updateUser(e: Event) {
 }
 
 function saveLocalUser() {
-  
+
   if (store.currentUser.id === "" || store.currentUser.task === "") {
     Toast.show({
       text: "Please select a valid User and Task"
     })
-  } else{
+  } else {
     store.setUser()
-  router.push(`/tasks/${store.currentUser.id}`)
+    router.push(`/tasks/${store.currentUser.id}`)
   }
 }
 
@@ -57,12 +57,7 @@ function test() {
         <div class="py-4">
           <GdButton @click="saveLocalUser">Set mode</GdButton>
         </div>
-        <div class="py-4">
-          <GdButton @click="test">Test Page</GdButton>
-        </div>
-
       </div>
     </GdCard>
   </GdContainer>
-
 </template>
