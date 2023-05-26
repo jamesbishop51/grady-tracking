@@ -27,10 +27,6 @@ function saveLocalUser() {
     router.push(`/tasks/${store.currentUser.id}`)
   }
 }
-
-function test() {
-  store.loadTaskHistory()
-}
 </script>
 
 <template>
@@ -56,12 +52,6 @@ function test() {
 
         <div class="py-4">
           <GdButton @click="saveLocalUser">Set mode</GdButton>
-        </div>
-        <div>
-          <GdButton @click="test">Test</GdButton>
-          <div v-for="tasks in store.taskHistory">
-            {{ tasks.name }} - {{  tasks.dateScanned }} - {{ tasks.task }} - {{ tasks.batchNo }}
-          </div>
         </div>
       </div>
     </GdCard>

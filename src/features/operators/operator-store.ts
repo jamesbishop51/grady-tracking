@@ -46,6 +46,10 @@ export const useOperatorStore = defineStore('operator-store', () => {
   const currentUser = ref<SelectedUser>({ name: "", id: "", task: "" })
   const scannedBarcode = ref<string>("DB-")
   const taskHistory = ref<TaskHistory[]>([])
+
+  const currentPage = ref(1)
+  const take = ref(25)
+
   /** Getters */
   const currentUserTasks = computed<TaskItems[]>(() => {
     if (!currentUser.value || !currentUser.value.id)
@@ -61,6 +65,18 @@ export const useOperatorStore = defineStore('operator-store', () => {
   )
 
   /** Actions */
+  function nextPage() {
+    currentPage.value++
+    return loadTaskHistory()
+  }
+
+  function previousPage() {
+    if (currentPage.value < 1)
+      return
+
+    currentPage.value--
+    return loadTaskHistory()
+  }
   async function selectUserById(id: string) {
     const name = operatorItems.value.find(d => d.id === id)?.name ?? ''
     currentUser.value = {
@@ -91,7 +107,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
   }
 
   async function loadTaskHistory() {
-    const { data } = await axios.get(`${pingUrl}/task-history?userId=${currentUser.value.id}`);
+    const { data } = await axios.get(`${pingUrl}/task-history?userId=${currentUser.value.id}&pageNumber=${currentPage.value}&itemsPerPage=${take.value}`)
     taskHistory.value = data;
   }
   // async function loadUsersAndTasks() {
@@ -111,11 +127,14 @@ export const useOperatorStore = defineStore('operator-store', () => {
     operatorItems,
     currentUser,
     currentUserTasks,
+    currentPage,
     taskHistory,
     scannedBarcode,
     operatorsToOptions,
     loadUsersAndTasks,
     loadLocalUser,
+    nextPage,
+    previousPage,
     loadTaskHistory,
     selectUserById,
     selectTask,
