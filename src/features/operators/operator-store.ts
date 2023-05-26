@@ -115,4 +115,5 @@ export const useOperatorStore = defineStore('operator-store', () => {
 });
 
 if (import.meta.hot)
+//@ts-ignore
   import.meta.hot.accept(acceptHMRUpdate(useOperatorStore, import.meta.hot))

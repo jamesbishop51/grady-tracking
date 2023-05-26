@@ -26,10 +26,11 @@ function saveLocalUser() {
     store.setUser()
   router.push(`/tasks/${store.currentUser.id}`)
   }
-  
-
 }
 
+function test() {
+  router.push(`/test`)
+}
 </script>
 
 <template>
@@ -55,6 +56,9 @@ function saveLocalUser() {
 
         <div class="py-4">
           <GdButton @click="saveLocalUser">Set mode</GdButton>
+        </div>
+        <div class="py-4">
+          <GdButton @click="test">Test Page</GdButton>
         </div>
 
       </div>
