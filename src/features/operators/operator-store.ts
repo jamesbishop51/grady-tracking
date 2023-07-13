@@ -2,43 +2,10 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
-
+import { Operators, SelectedUser, TaskHistory, TaskItems, SelectOption } from '~/types'
 const pingUrl = 'https://dev.grady-admin.nebule.software/net-api/task'
 //const pingUrl = "https://localhost:62721/api/task"
-export interface Operators {
-  name: string
-  id: string
-  tasks: TaskItems[]
-}
-export interface TaskItems {
-  text: string
-}
 
-export interface SelectOption {
-  text: string
-  value: string | number
-}
-
-export interface SelectedUser {
-  name: string
-  id: string
-  task?: string
-}
-
-export interface TaskEntry {
-  userId: string
-  task: string
-  comments?: string
-  batchNo?: string
-  dateScanned?: string
-}
-
-export interface TaskHistory {
-  name: string
-  task: string
-  batchNo: string
-  dateScanned: string
-}
 
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
