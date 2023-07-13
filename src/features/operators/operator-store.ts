@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 
-const pingUrl = "https://dev.grady-admin.nebule.software/net-api/task"
+const pingUrl = 'https://dev.grady-admin.nebule.software/net-api/task'
 //const pingUrl = "https://localhost:62721/api/task"
 export interface Operators {
   name: string
@@ -43,8 +43,8 @@ export interface TaskHistory {
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
   const operatorItems = ref<Operators[]>([])
-  const currentUser = ref<SelectedUser>({ name: "", id: "", task: "" })
-  const scannedBarcode = ref<string>("DB-")
+  const currentUser = ref<SelectedUser>({ name: '', id: '', task: '' })
+  const scannedBarcode = ref<string>('DB-')
   const taskHistory = ref<TaskHistory[]>([])
 
   const currentPage = ref(1)
@@ -52,16 +52,15 @@ export const useOperatorStore = defineStore('operator-store', () => {
 
   /** Getters */
   const currentUserTasks = computed<TaskItems[]>(() => {
-    if (!currentUser.value || !currentUser.value.id)
-      return []
+    if (!currentUser.value || !currentUser.value.id) return []
 
-    const data = operatorItems.value.find(d => d.id === currentUser.value?.id)
+    const data = operatorItems.value.find((d) => d.id === currentUser.value?.id)
     if (!data) return []
     return data.tasks
   })
 
   const operatorsToOptions = computed<SelectOption[]>(() =>
-    operatorItems.value.map(o => ({ text: o.name, value: o.id })),
+    operatorItems.value.map((o) => ({ text: o.name, value: o.id }))
   )
 
   /** Actions */
@@ -71,32 +70,30 @@ export const useOperatorStore = defineStore('operator-store', () => {
   }
 
   function previousPage() {
-    if (currentPage.value < 1)
-      return
+    if (currentPage.value < 1) return
 
     currentPage.value--
     return loadTaskHistory()
   }
   async function selectUserById(id: string) {
-    const name = operatorItems.value.find(d => d.id === id)?.name ?? ''
+    const name = operatorItems.value.find((d) => d.id === id)?.name ?? ''
     currentUser.value = {
       id,
       name,
-      task: "",
+      task: '',
     }
   }
 
   async function selectTask(task: string) {
-    if (currentUser.value)
-      currentUser.value.task = task
+    if (currentUser.value) currentUser.value.task = task
   }
 
   async function setUser() {
-    await set("user", JSON.stringify(currentUser.value))
+    await set('user', JSON.stringify(currentUser.value))
   }
 
   async function loadLocalUser() {
-    const previouslyLoggedIN = await get("user")
+    const previouslyLoggedIN = await get('user')
     const previousUser = JSON.parse(previouslyLoggedIN)
     currentUser.value = previousUser
   }
@@ -107,20 +104,26 @@ export const useOperatorStore = defineStore('operator-store', () => {
   }
 
   async function loadTaskHistory() {
-    const { data } = await axios.get(`${pingUrl}/task-history?userId=${currentUser.value.id}&pageNumber=${currentPage.value}&itemsPerPage=${take.value}`)
-    taskHistory.value = data;
+    const { data } = await axios.get(
+      `${pingUrl}/task-history?userId=${currentUser.value.id}&pageNumber=${currentPage.value}&itemsPerPage=${take.value}`
+    )
+    taskHistory.value = data
   }
   // async function loadUsersAndTasks() {
 
-
   function postBarcode(comment: any) {
-    axios.post(`${pingUrl}`, ({ userId: currentUser.value.id, task: currentUser.value.task, batchNo: scannedBarcode.value, comment: comment }))
+    axios.post(`${pingUrl}`, {
+      userId: currentUser.value.id,
+      task: currentUser.value.task,
+      batchNo: scannedBarcode.value,
+      comment: comment,
+    })
     scannedBarcode.value = 'DB-'
   }
 
   async function logOut() {
-    currentUser.value = { name: "", id: "", task: "" }
-    await del("user")
+    currentUser.value = { name: '', id: '', task: '' }
+    await del('user')
   }
 
   return {
@@ -140,9 +143,9 @@ export const useOperatorStore = defineStore('operator-store', () => {
     selectTask,
     setUser,
     postBarcode,
-    logOut
+    logOut,
   }
-});
+})
 
 if (import.meta.hot)
   //@ts-ignore

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, onUnmounted, onMounted } from 'vue'
-import { NFC, NfcTag } from "@awesome-cordova-plugins/nfc"
+import { NFC, NfcTag } from '@awesome-cordova-plugins/nfc'
 import GdTextInput from '~/components/gd-text-input.vue'
 import GdLabel from '~/components/gd-label.vue'
 import { useRouter } from 'vue-router'
@@ -15,46 +15,53 @@ const store = useOperatorStore()
 
 const router = useRouter()
 
-const rawData = ref<string>("")
-const regex = /[dD][bB]-\d{6}-\d+/;
-const BatchNo = ref<string>("")
+const rawData = ref<string>('')
+const batchRegex = /[dD][bB]-\d{6}-\d+/
+const jfRegex = /(\d{8}\/\d{3})/
 
 onMounted(async () => {
-  NFC.readerMode(NFC.FLAG_READER_NFC_A | NFC.FLAG_READER_NFC_V)
-    .subscribe(
-      (tag: NfcTag) => {
-        console.log('GOT TAG')
-        console.log("tag. >>", tag.id);
-        console.log(tag.ndefMessage)
-        console.log(JSON.stringify(tag))
-        if (tag.ndefMessage)
-          rawData.value = NFC.bytesToString(tag.ndefMessage[0].payload)
-        const BatchNoMatch = rawData.value.match(regex)
-        if (BatchNoMatch)
-          store.scannedBarcode = BatchNoMatch[0]
-        router.push(`/tasks/${id}/submit/${store.scannedBarcode}`)
+  NFC.readerMode(NFC.FLAG_READER_NFC_A | NFC.FLAG_READER_NFC_V).subscribe(
+    (tag: NfcTag) => {
+      console.log('GOT TAG')
+      console.log('tag. >>', tag.id)
+      console.log(tag.ndefMessage)
+      console.log(JSON.stringify(tag))
+      if (tag.ndefMessage)
+        rawData.value = NFC.bytesToString(tag.ndefMessage[0].payload)
+      const BatchNoMatch = rawData.value.match(batchRegex)
+      const JfMatch = rawData.value.match(jfRegex)
+      if (BatchNoMatch) {
+        store.scannedBarcode = BatchNoMatch[0]
+      } else if (JfMatch) {
+        store.scannedBarcode = JfMatch[0]
       }
-    )
-
+      router.push(`/tasks/${id}/submit/${store.scannedBarcode}`)
+    }
+  )
 })
-
 </script>
 <template>
   <GdContainer>
     <div>
       <GdCard>
         <div>
-          <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">{{ store.currentUser?.name }} | {{
-            store.currentUser?.task
-          }}</h5>
+          <h5 class="text-2xl font-bold tracking-tight px-4 pt-4">
+            {{ store.currentUser?.name }} | {{ store.currentUser?.task }}
+          </h5>
           <h5 class="text-2xl tracking-tight px-4 py-4">Scan NFC Tag</h5>
         </div>
       </GdCard>
       <GdCard class="mt-5">
         <div class="p-4">
           <GdLabel>Manual Entry</GdLabel>
-          <GdTextInput placeholder="DB-" v-model="store.scannedBarcode"></GdTextInput>
-          <GdButtonLink :to="`/tasks/${id}/submit/${store.scannedBarcode}`" class="mt-4">Enter Manual Code
+          <GdTextInput
+            placeholder="DB-"
+            v-model="store.scannedBarcode"
+          ></GdTextInput>
+          <GdButtonLink
+            :to="`/tasks/${id}/submit/${store.scannedBarcode}`"
+            class="mt-4"
+            >Enter Manual Code
           </GdButtonLink>
         </div>
       </GdCard>
