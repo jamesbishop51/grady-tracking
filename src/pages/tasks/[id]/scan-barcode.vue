@@ -79,7 +79,7 @@ async function stopScan() {
         <div class="p-4">
           <GdLabel>Manual Entry</GdLabel>
           <GdTextInput
-            placeholder="DB-"
+            placeholder=""
             v-model="store.scannedBarcode"
           ></GdTextInput>
           <GdButtonLink

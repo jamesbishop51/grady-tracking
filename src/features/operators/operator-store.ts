@@ -11,7 +11,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
   const operatorItems = ref<Operators[]>([])
   const currentUser = ref<SelectedUser>({ name: '', id: '', task: '' })
-  const scannedBarcode = ref<string>('DB-')
+  const scannedBarcode = ref<string>('')
   const taskHistory = ref<TaskHistory[]>([])
 
   const currentPage = ref(1)
@@ -85,7 +85,7 @@ export const useOperatorStore = defineStore('operator-store', () => {
       batchNo: scannedBarcode.value,
       comment: comment,
     })
-    scannedBarcode.value = 'DB-'
+    scannedBarcode.value = ''
   }
 
   async function logOut() {

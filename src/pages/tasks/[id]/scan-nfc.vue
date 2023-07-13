@@ -32,10 +32,14 @@ onMounted(async () => {
       const JfMatch = rawData.value.match(jfRegex)
       if (BatchNoMatch) {
         store.scannedBarcode = BatchNoMatch[0]
+        console.log('BatchNoMatch', BatchNoMatch)
+        router.push(`/tasks/${id}/submit`)
       } else if (JfMatch) {
         store.scannedBarcode = JfMatch[0]
+        console.log('JfMatch', JfMatch)
+        router.push(`/tasks/${id}/submit`)
       }
-      router.push(`/tasks/${id}/submit/${store.scannedBarcode}`)
+      
     }
   )
 })
@@ -55,11 +59,11 @@ onMounted(async () => {
         <div class="p-4">
           <GdLabel>Manual Entry</GdLabel>
           <GdTextInput
-            placeholder="DB-"
+            placeholder=""
             v-model="store.scannedBarcode"
           ></GdTextInput>
           <GdButtonLink
-            :to="`/tasks/${id}/submit/${store.scannedBarcode}`"
+            :to="`/tasks/${id}/submit`"
             class="mt-4"
             >Enter Manual Code
           </GdButtonLink>
