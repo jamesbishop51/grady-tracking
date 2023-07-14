@@ -51,7 +51,7 @@ async function startScan() {
     if (result.hasContent) {
       store.scannedBarcode = result.content || ''
       stopScan()
-      router.push(`/tasks/${id}/submit/${store.scannedBarcode}`)
+      router.push(`/tasks/${id}/submit`)
     }
   }
 }
