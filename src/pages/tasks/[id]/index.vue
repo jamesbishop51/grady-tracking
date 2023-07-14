@@ -21,10 +21,9 @@ const store = useOperatorStore()
         </h5>
         <div class="p-4 grid gap-4 sm:grid-cols-2">
           <GdButtonLink :to="`/tasks/${id}/scan-barcode`"
-            >Scan Barcode</GdButtonLink
+            >Scan Door</GdButtonLink
           >
           <!-- <GdButtonLink to="/">Error List</GdButtonLink> -->
-          <GdButtonLink :to="`/tasks/${id}/scan-nfc`">Scan NFC</GdButtonLink>
           <GdButtonLink :to="`/tasks/${id}/scan-history/`"
             >Scan History</GdButtonLink
           >
