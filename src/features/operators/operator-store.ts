@@ -3,9 +3,7 @@ import { ref, computed } from 'vue'
 import { del, get, set } from 'idb-keyval'
 import axios from 'axios'
 import { Operators, SelectedUser, TaskHistory, TaskItems, SelectOption } from '~/types'
-const pingUrl = 'https://dev.grady-admin.nebule.software/net-api/task'
-//const pingUrl = "https://localhost:62721/api/task"
-
+const pingUrl = 'https://admin-app.gradyjoinery.co.uk/net-api/task'
 
 export const useOperatorStore = defineStore('operator-store', () => {
   /** State */
@@ -76,7 +74,6 @@ export const useOperatorStore = defineStore('operator-store', () => {
     )
     taskHistory.value = data
   }
-  // async function loadUsersAndTasks() {
 
   function postBarcode(comment: any) {
     axios.post(`${pingUrl}`, {
